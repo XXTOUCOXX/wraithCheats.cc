@@ -1,1385 +1,349 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wraith | Lua Extension</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0b;
-            --bg-secondary: #111113;
-            --bg-tertiary: #1a1a1d;
-            --red-primary: #ff3b3b;
-            --red-glow: #ff2222;
-            --red-dark: #cc2929;
-            --red-accent: #ff5555;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a5;
-            --text-muted: #5a5a60;
-        }
-
-        html {
-            background: var(--bg-primary);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            cursor: default;
-        }
-
-        ::selection {
-            background: var(--red-primary);
-            color: white;
-        }
-
-        /* Custom Cursor */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--red-primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease, opacity 0.1s ease;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--red-primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(180deg, rgba(10,10,11,0.95) 0%, rgba(10,10,11,0) 100%);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--red-primary) 0%, var(--red-dark) 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 0 20px rgba(255, 59, 59, 0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--red-primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            padding: 0.75rem 1.75rem;
-            background: var(--red-primary);
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 30px rgba(255, 59, 59, 0.3);
-        }
-
-        .nav-cta:hover {
-            background: var(--red-accent);
-            transform: translateY(-2px);
-            box-shadow: 0 0 40px rgba(255, 59, 59, 0.5);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 59, 59, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(255, 59, 59, 0.08) 0%, transparent 40%),
-                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255, 59, 59, 0.05) 0%, transparent 40%);
-            pointer-events: none;
-        }
-
-        .hero-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image:
-                linear-gradient(rgba(255, 59, 59, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 59, 59, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
-            -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 59, 59, 0.1);
-            border: 1px solid rgba(255, 59, 59, 0.2);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            color: var(--red-accent);
-            margin-bottom: 2rem;
-        }
-
-
-        .hero-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--red-primary);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .hero-title {
-            font-size: clamp(3.5rem, 12vw, 9rem);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 0.9;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .hero-title .line {
-            display: block;
-            overflow: hidden;
-        }
-
-        .hero-title .word {
-            display: inline-block;
-        }
-
-        .hero-title .highlight {
-            background: linear-gradient(135deg, var(--red-primary) 0%, var(--red-accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 60px rgba(255, 59, 59, 0.5);
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.7;
-            margin-bottom: 3rem;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--red-primary) 0%, var(--red-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 30px rgba(255, 59, 59, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 40px rgba(255, 59, 59, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .hero-visual {
-            margin-top: 5rem;
-            width: 100%;
-            max-width: 1000px;
-            position: relative;
-        }
-
-        .hero-image-wrapper {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow:
-                0 0 0 1px rgba(255, 59, 59, 0.1),
-                0 20px 80px -20px rgba(0, 0, 0, 0.8),
-                0 0 100px rgba(255, 59, 59, 0.1);
-        }
-
-        .hero-image-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, rgba(26, 26, 29, 0.95) 0%, transparent 100%);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            padding: 0 1rem;
-        }
-
-        .hero-image {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .hero-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120%;
-            height: 120%;
-            background: radial-gradient(ellipse at center, rgba(255, 59, 59, 0.15) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 2s forwards;
-        }
-
-        .scroll-indicator span {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(180deg, var(--red-primary) 0%, transparent 100%);
-            position: relative;
-        }
-
-        .scroll-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: var(--red-primary);
-            animation: scrollDown 2s infinite;
-        }
-
-        @keyframes scrollDown {
-            0% { top: 0; opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translate(-50%, 20px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
-        /* Features Section */
-        .features {
-            padding: 10rem 4rem;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 6rem;
-        }
-
-        .section-label {
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--red-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-title .word {
-            display: inline-block;
-        }
-
-        .section-desc {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 59, 59, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 59, 59, 0.2);
-            box-shadow: 0 20px 60px -20px rgba(255, 59, 59, 0.2);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, rgba(255, 59, 59, 0.15) 0%, rgba(255, 59, 59, 0.05) 100%);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(255, 59, 59, 0.1);
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.01em;
-        }
-
-        .feature-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Code Preview Section */
-        .code-section {
-            padding: 10rem 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .code-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            align-items: center;
-        }
-
-        .code-block {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow:
-                0 0 0 1px rgba(255, 59, 59, 0.05),
-                0 30px 60px -30px rgba(0, 0, 0, 0.5);
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            background: var(--bg-tertiary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .code-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .code-dot:nth-child(1) { background: #ff5f57; }
-        .code-dot:nth-child(2) { background: #ffbd2e; }
-        .code-dot:nth-child(3) { background: #28c840; }
-
-        .code-filename {
-            margin-left: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .code-body {
-            padding: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            overflow-x: auto;
-        }
-
-        .code-body pre {
-            margin: 0;
-        }
-
-        .code-comment { color: var(--text-muted); }
-        .code-keyword { color: var(--red-primary); }
-        .code-function { color: #82aaff; }
-        .code-string { color: #c3e88d; }
-        .code-number { color: #f78c6c; }
-        .code-variable { color: #ffcb6b; }
-
-        /* Gallery Section */
-        .gallery {
-            padding: 10rem 4rem;
-            position: relative;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            aspect-ratio: 16/10;
-            cursor: pointer;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .gallery-item::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-item:hover::after {
-            opacity: 1;
-        }
-
-        .gallery-item:nth-child(1) {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        /* Stats Section */
-        .stats {
-            padding: 8rem 4rem;
-            background: var(--bg-secondary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(ellipse 50% 80% at 20% 0%, rgba(255, 59, 59, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse 50% 80% at 80% 100%, rgba(255, 59, 59, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: clamp(3rem, 6vw, 4.5rem);
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--red-primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* CTA Section */
-        .cta {
-            padding: 12rem 4rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255, 59, 59, 0.15) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .cta-content {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .cta-title {
-            font-size: clamp(3rem, 7vw, 5rem);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1;
-            margin-bottom: 2rem;
-        }
-
-        .cta-title .word {
-            display: inline-block;
-        }
-
-        .cta-desc {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-        }
-
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .footer-copy {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .code-container {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .gallery-item:nth-child(1) {
-                grid-column: span 2;
-                grid-row: span 1;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero, .features, .code-section, .gallery, .cta {
-                padding: 6rem 1.5rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-item:nth-child(1) {
-                grid-column: span 1;
-            }
-
-            .hero-cta, .cta-buttons {
-                flex-direction: column;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 2rem;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WRAITH — RedM Extension</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
 
-    <!-- Navigation -->
-    <nav>
-        <a href="#" class="logo">
-            <div class="logo-icon">W</div>
-            WRAITH
-        </a>
-        <ul class="nav-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#code">Documentation</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#download">Download</a></li>
-        </ul>
-        <a href="#download" class="nav-cta">Get Started</a>
-    </nav>
+<div class="scroll-progress"></div>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-grid"></div>
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <a href="#top" class="nav__brand">WRAITH</a>
+  <ul class="nav__links">
+    <li><a href="#arsenal">Arsenal</a></li>
+    <li><a href="#preview">Preview</a></li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#install" class="nav__cta">Get Wraith</a>
+</nav>
 
-        <div class="hero-badge">
-            <span>Version 2.0 Now Available</span>
-        </div>
+<!-- ─── HERO ─── -->
+<section class="hero" id="top">
+  <div class="hero__bg"></div>
+  <canvas id="particles" class="hero__particles"></canvas>
 
-        <h1 class="hero-title">
-            <span class="line"><span class="word">Unleash</span></span>
-            <span class="line"><span class="word">Your</span> <span class="word highlight">Power</span></span>
-        </h1>
+  <div class="hero__inner">
+    <div class="hero__eyebrow"><span class="dot"></span>BUILD 1.0.0 · LUA · REDM</div>
+    <h1 class="hero__title" data-text="WRAITH">WRAITH</h1>
+    <div class="hero__subtitle">A spectre on your server</div>
+    <p class="hero__tagline">
+      A frontier-grade Lua extension for RedM. One key opens a deep,
+      hierarchical menu of player tools, world controls, spawnables and
+      diagnostics — built for server owners, players and Lua tinkerers.
+    </p>
+    <div class="hero__ctas">
+      <a href="#install" class="btn btn--primary">⤓ &nbsp;Download Wraith</a>
+      <a href="#arsenal" class="btn btn--ghost">Browse Arsenal →</a>
+    </div>
 
-        <p class="hero-subtitle">
-            The most powerful Lua executor for RedM.
-            Precision-crafted for performance, security, and seamless integration with Red Dead Redemption.
-        </p>
+    <div class="hero__stats">
+      <div class="stat"><div class="stat__num" data-count="1800" data-suffix="+">0</div><div class="stat__label">NPC Peds</div></div>
+      <div class="stat"><div class="stat__num" data-count="116">0</div><div class="stat__label">Vehicles</div></div>
+      <div class="stat"><div class="stat__num" data-count="106">0</div><div class="stat__label">Horses</div></div>
+      <div class="stat"><div class="stat__num" data-count="1400" data-suffix="+">0</div><div class="stat__label">Objects</div></div>
+      <div class="stat"><div class="stat__num" data-count="200" data-suffix="+">0</div><div class="stat__label">Commands</div></div>
+    </div>
+  </div>
 
-        <div class="hero-cta">
-            <a href="#download" class="btn btn-primary">Download Now</a>
-            <a href="#features" class="btn btn-secondary">Learn More</a>
-        </div>
+  <div class="scroll-hint">SCROLL · DRAW · FIRE</div>
+</section>
 
-        <div class="hero-visual">
-            <div class="hero-glow"></div>
-            <div class="hero-image-wrapper">
-                <img src="assets/img/mainmenu.jpg" alt="Wraith Interface" class="hero-image">
-            </div>
-        </div>
+<!-- ─── MARQUEE ─── -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>GODMODE&nbsp;&nbsp;★&nbsp;&nbsp;NOCLIP&nbsp;&nbsp;★&nbsp;&nbsp;TELEPORT&nbsp;&nbsp;★&nbsp;&nbsp;ESP&nbsp;&nbsp;★&nbsp;&nbsp;SPAWN ANYTHING&nbsp;&nbsp;★&nbsp;&nbsp;WEATHER CONTROL&nbsp;&nbsp;★&nbsp;&nbsp;PED CHANGER&nbsp;&nbsp;★&nbsp;&nbsp;INFINITE AMMO&nbsp;&nbsp;★&nbsp;&nbsp;</span>
+  </div>
+</div>
 
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
+<!-- ─── ARSENAL / FEATURES ─── -->
+<section class="section" id="arsenal">
+  <header class="section__head reveal">
+    <div class="section__index"><small>SECTION 01</small>The Arsenal</div>
+    <div>
+      <h2 class="section__title">Ten chambers, <em>fully loaded.</em></h2>
+      <p class="section__intro">Every category in the Wraith menu, mapped. Hundreds of toggles, buttons and submenus — organized so you find the right shot in under a second.</p>
+    </div>
+  </header>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <span class="section-label">Features</span>
-            <h2 class="section-title">
-                <span class="word">Built</span>
-                <span class="word">for</span>
-                <span class="word">the</span>
-                <span class="word">Elite</span>
-            </h2>
-            <p class="section-desc">
-                Every feature engineered for RedM. Undetectable,
-                lightning-fast, and infinitely customizable for your Wild West adventures.
-            </p>
-        </div>
+  <div class="features reveal-stagger">
+    <div class="feature feature--xl">
+      <div>
+        <div class="feature__num">[ 01 ] PLAYER</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 22c0-4 4-7 8-7s8 3 8 7"/></svg></div>
+        <h3 class="feature__title">Player Core, Status & Combat</h3>
+        <p class="feature__desc">Heal, max stats, change ped, godmode, horse godmode, perfect accuracy, lock-on, no-lasso. Every player-side dial, in three tidy submenus.</p>
+      </div>
+      <div class="feature__count"><span>3 SUBMENUS</span><strong>22 ACTIONS</strong></div>
+    </div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Blazing Fast</h3>
-                <p class="feature-desc">
-                    Optimized execution engine with zero impact on game performance.
-                    Your FPS stays untouched.
-                </p>
-            </div>
+    <div class="feature feature--md">
+      <div>
+        <div class="feature__num">[ 02 ] MOVEMENT</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <h3 class="feature__title">Camera, Teleport & Noclip</h3>
+        <p class="feature__desc">Free-cam, noclip, invisibility, minimap & crosshair toggles, teleport-to-marker, off-map jumps.</p>
+      </div>
+      <div class="feature__count"><span>4 SUBMENUS</span><strong>14 ACTIONS</strong></div>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3 class="feature-title">Undetectable</h3>
-                <p class="feature-desc">
-                    Advanced anti-detection systems keep you protected.
-                    Stay invisible, stay safe.
-                </p>
-            </div>
+    <div class="feature feature--md">
+      <div>
+        <div class="feature__num">[ 03 ] WEAPONS</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><path d="M3 12h6l2-3 4 6 2-3h4"/></svg></div>
+        <h3 class="feature__title">Loadouts & Ammo</h3>
+        <p class="feature__desc">Complete loadouts, infinite ammo, reload-all, perfect accuracy. 73 inventory weapons, 64 ammo types.</p>
+      </div>
+      <div class="feature__count"><span>4 SUBMENUS</span><strong>96 WEAPONS</strong></div>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">🔧</div>
-                <h3 class="feature-title">Full Lua Support</h3>
-                <p class="feature-desc">
-                    Complete Lua 5.4 environment with extended libraries
-                    and RedM-native APIs.
-                </p>
-            </div>
+    <div class="feature feature--sm">
+      <div>
+        <div class="feature__num">[ 04 ] HEALTH</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><path d="M12 21s-7-4.5-7-11a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 6.5-7 11-7 11z"/></svg></div>
+        <h3 class="feature__title">Vitals & Survival</h3>
+        <p class="feature__desc">Hunger, thirst, armour, drunk state, revenge mode.</p>
+      </div>
+      <div class="feature__count"><span>2 SUBS</span><strong>11</strong></div>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">🎨</div>
-                <h3 class="feature-title">Custom UI</h3>
-                <p class="feature-desc">
-                    Build stunning in-game interfaces with our
-                    intuitive UI framework.
-                </p>
-            </div>
+    <div class="feature feature--sm">
+      <div>
+        <div class="feature__num">[ 05 ] WORLD</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+        <h3 class="feature__title">Weather, Time & Money</h3>
+        <p class="feature__desc">Sun, rain, pigeons-as-rain, time skips, framework paychecks.</p>
+      </div>
+      <div class="feature__count"><span>4 SUBS</span><strong>26</strong></div>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">🐴</div>
-                <h3 class="feature-title">RedM Native</h3>
-                <p class="feature-desc">
-                    Built specifically for RedM with full access to
-                    horses, weapons, and world natives.
-                </p>
-            </div>
+    <div class="feature feature--sm">
+      <div>
+        <div class="feature__num">[ 06 ] PLAYERS</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2 2-4 5-4s4 2 4 4"/></svg></div>
+        <h3 class="feature__title">Per-Player Toolkit</h3>
+        <p class="feature__desc">Spectate, troll, props, spawn-on, gang/crowd, OP troll, server economy.</p>
+      </div>
+      <div class="feature__count"><span>6 SUBS</span><strong>140+</strong></div>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">🔄</div>
-                <h3 class="feature-title">Auto Updates</h3>
-                <p class="feature-desc">
-                    Automatic updates ensure compatibility with the
-                    latest RedM versions.
-                </p>
-            </div>
-        </div>
-    </section>
+    <div class="feature feature--sm">
+      <div>
+        <div class="feature__num">[ 07 ] ESP</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></div>
+        <h3 class="feature__title">Animals & Visuals</h3>
+        <p class="feature__desc">3D / 2D boxes, chams, name, health, distance, color presets.</p>
+      </div>
+      <div class="feature__count"><span>1 SUB</span><strong>11</strong></div>
+    </div>
 
-    <!-- Code Preview Section -->
-    <section class="code-section" id="code">
-        <div class="code-container">
-            <div class="code-content">
-                <span class="section-label">Simple & Powerful</span>
-                <h2 class="section-title">
-                    <span class="word">Write</span>
-                    <span class="word">Once,</span>
-                    <span class="word">Run</span>
-                    <span class="word">Anywhere</span>
-                </h2>
-                <p class="section-desc">
-                    Clean, intuitive API that feels natural.
-                    Start scripting in minutes, not hours.
-                    Full documentation and examples included.
-                </p>
-            </div>
+    <div class="feature feature--md">
+      <div>
+        <div class="feature__num">[ 08 ] DEBUG</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div>
+        <h3 class="feature__title">Console & Diagnostics</h3>
+        <p class="feature__desc">Trigger raw commands, run checklist coverage, dump missing native labels — built-in QA for menu authors.</p>
+      </div>
+      <div class="feature__count"><span>4 SUBMENUS</span><strong>QA TOOLS</strong></div>
+    </div>
 
-            <div class="code-block">
-                <div class="code-header">
-                    <div class="code-dot"></div>
-                    <div class="code-dot"></div>
-                    <div class="code-dot"></div>
-                    <span class="code-filename">example.lua</span>
-                </div>
-                <div class="code-body">
-<pre><span class="code-comment">-- Wraith RedM Example</span>
+    <div class="feature feature--lg">
+      <div>
+        <div class="feature__num">[ 09 ] CONFIG BROWSER</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 9h18M9 9v12M3 15h18"/></svg></div>
+        <h3 class="feature__title">Browse <em style="color:var(--blood);font-style:normal">every</em> game config</h3>
+        <p class="feature__desc">Live filtering across the full RedM data tables: <strong style="color:var(--bone)">~1,800 NPCs · 200 animals · 106 horses · 116 vehicles · 1,400 objects · 21 weather · 2,500 music events</strong>. Spawn or apply with one click.</p>
+      </div>
+      <div class="feature__count"><span>6 SUBMENUS</span><strong>~6,000 ENTRIES</strong></div>
+    </div>
 
-<span class="code-keyword">local</span> <span class="code-variable">ped</span> = <span class="code-function">PlayerPedId</span>()
-<span class="code-keyword">local</span> <span class="code-variable">coords</span> = <span class="code-function">GetEntityCoords</span>(<span class="code-variable">ped</span>)
+    <div class="feature feature--sm">
+      <div>
+        <div class="feature__num">[ 10 ] NOTIFICATIONS</div>
+        <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><path d="M5 18h14l-1.5-2V11a5.5 5.5 0 0 0-11 0v5L5 18zM10 21h4"/></svg></div>
+        <h3 class="feature__title">Toast Queue</h3>
+        <p class="feature__desc">Toggle, preview, clear — quiet feedback while you operate.</p>
+      </div>
+      <div class="feature__count"><span>1 SUB</span><strong>3</strong></div>
+    </div>
+  </div>
+</section>
 
-<span class="code-comment">-- Spawn horse with custom attributes</span>
-<span class="code-keyword">local</span> <span class="code-variable">horse</span> = <span class="code-function">Wraith.SpawnHorse</span>(<span class="code-string">"A_C_Horse_Arabian_White"</span>, <span class="code-variable">coords</span>)
-<span class="code-function">SetPedAsGroupMember</span>(<span class="code-variable">horse</span>, <span class="code-function">GetPedGroupIndex</span>(<span class="code-variable">ped</span>))
+<!-- ─── PREVIEW / MENU SHOWCASE ─── -->
+<section class="section" id="preview">
+  <header class="section__head reveal">
+    <div class="section__index"><small>SECTION 02</small>In-Game</div>
+    <div>
+      <h2 class="section__title">A menu that <em>feels</em> like the game.</h2>
+      <p class="section__intro">Distressed paper, blood-red headers, ranger silhouettes. The Wraith UI lives inside the world it controls.</p>
+    </div>
+  </header>
 
-<span class="code-comment">-- Register menu hotkey</span>
-<span class="code-function">Wraith.RegisterHotkey</span>(<span class="code-string">"F5"</span>, <span class="code-keyword">function</span>()
-    <span class="code-function">Wraith.OpenMenu</span>()
-<span class="code-keyword">end</span>)</pre>
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="showcase">
+    <div class="showcase__visual reveal">
+      <div class="showcase__img-wrap">
+        <img src="assets/wraith-menu.png" alt="Wraith in-game menu" class="showcase__img">
+      </div>
+    </div>
+    <div class="reveal reveal--delay-2">
+      <ul class="showcase__list">
+        <li class="showcase__item"><span class="showcase__tag">[R]</span><span class="showcase__name">PLAYER</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">MOVEMENT &amp; CAMERA</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">COMBAT &amp; WEAPONS</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">HEALTH &amp; SURVIVAL</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">WORLD &amp; ENVIRONMENT</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">PLAYERS</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">ESP / VISUALS</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">DEBUG / CONSOLE</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">CONFIG BROWSER</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">NOTIFICATIONS</span><span class="showcase__chev">›</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="section-header">
-            <span class="section-label">Gallery</span>
-            <h2 class="section-title">
-                <span class="word">See</span>
-                <span class="word">It</span>
-                <span class="word">In</span>
-                <span class="word">Action</span>
-            </h2>
-            <p class="section-desc">
-                Screenshots from our community showcasing
-                the power of Wraith.
-            </p>
-        </div>
+<!-- ─── INSTALL ─── -->
+<section class="section" id="install">
+  <header class="section__head reveal">
+    <div class="section__index"><small>SECTION 03</small>Install</div>
+    <div>
+      <h2 class="section__title">Four steps. <em>One key.</em></h2>
+      <p class="section__intro">Drop in, list in <code>server.cfg</code>, reboot, press F4. That's it.</p>
+    </div>
+  </header>
 
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="assets/img/mainmenu.jpg" alt="Main Menu">
-            </div>
-            <div class="gallery-item">
-                <img src="assets/img/menu.png" alt="Script Menu">
-            </div>
-            <div class="gallery-item">
-                <img src="assets/img/mainmenu2.jpg" alt="Interface">
-            </div>
-            <div class="gallery-item">
-                <img src="assets/img/playersoptions.jpg" alt="Player Options">
-            </div>
-        </div>
-    </section>
+  <div class="install reveal">
+    <canvas id="rain" class="command-rain"></canvas>
+    <div class="install__steps">
+      <div class="install-step">
+        <div class="install-step__num">01</div>
+        <div class="install-step__title">Download</div>
+        <div class="install-step__desc">Grab the latest release from GitHub. Place the <code>wraith</code> folder in <code>resources/</code>.</div>
+      </div>
+      <div class="install-step">
+        <div class="install-step__num">02</div>
+        <div class="install-step__title">Register</div>
+        <div class="install-step__desc">Add <code>ensure wraith</code> to your <code>server.cfg</code>. No dependencies.</div>
+      </div>
+      <div class="install-step">
+        <div class="install-step__num">03</div>
+        <div class="install-step__title">Boot</div>
+        <div class="install-step__desc">Restart your RedM server. Configs hot-load on first menu open.</div>
+      </div>
+      <div class="install-step">
+        <div class="install-step__num">04</div>
+        <div class="install-step__title">Open</div>
+        <div class="install-step__desc">Press <code>F4</code> in-game. The wraith arrives.</div>
+      </div>
+    </div>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number" data-value="50">0K+</div>
-                <div class="stat-label">Active Users</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" data-value="500">0+</div>
-                <div class="stat-label">Scripts Available</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" data-value="99.9">0%</div>
-                <div class="stat-label">Uptime</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" data-value="24">0/7</div>
-                <div class="stat-label">Support</div>
-            </div>
-        </div>
-    </section>
+    <div class="terminal">
+      <div class="terminal__head">
+        <span class="terminal__dot"></span>
+        <span class="terminal__dot" style="background:#a89880;box-shadow:none"></span>
+        <span class="terminal__dot" style="background:#6b3a2a;box-shadow:none"></span>
+        <span style="margin-left:auto">~/redm-server — wraith</span>
+      </div>
+      <div class="terminal__body"></div>
+    </div>
+  </div>
+</section>
 
-    <!-- CTA Section -->
-    <section class="cta" id="download">
-        <div class="cta-bg"></div>
-        <div class="cta-content">
-            <h2 class="cta-title">
-                <span class="word">Ready</span>
-                <span class="word">to</span>
-                <span class="word">Dominate?</span>
-            </h2>
-            <p class="cta-desc">
-                Join the frontier's finest and experience the power of Wraith for RedM.
-                Free to try, built to dominate the Wild West.
-            </p>
-            <div class="cta-buttons">
-                <a href="#" class="btn btn-primary">Download for Free</a>
-                <a href="#" class="btn btn-secondary">Join Discord</a>
-            </div>
-        </div>
-    </section>
+<!-- ─── FAQ ─── -->
+<section class="section" id="faq">
+  <header class="section__head reveal">
+    <div class="section__index"><small>SECTION 04</small>FAQ</div>
+    <div>
+      <h2 class="section__title">Common <em>questions.</em></h2>
+    </div>
+  </header>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <a href="#" class="logo">
-                <div class="logo-icon">W</div>
-                WRAITH
-            </a>
-            <ul class="footer-links">
-                <li><a href="#">Documentation</a></li>
-                <li><a href="#">Discord</a></li>
-                <li><a href="#">GitHub</a></li>
-                <li><a href="#">Support</a></li>
-            </ul>
-            <span class="footer-copy">&copy; 2024 Wraith. All rights reserved.</span>
-        </div>
-    </footer>
+  <div class="faq reveal">
+    <div class="faq__item">
+      <div class="faq__q">Does this work with all RedM frameworks?<span class="faq__plus">+</span></div>
+      <div class="faq__a">Yes. Wraith ships framework-agnostic and includes targeted economy hooks for Bandera, Yellowstone, DRB, Dakota SV, GoldRush, Frontier and Silent River. New frameworks can be added in <code>configs/economy.lua</code>.</div>
+    </div>
+    <div class="faq__item">
+      <div class="faq__q">Is the menu keybind configurable?<span class="faq__plus">+</span></div>
+      <div class="faq__a">Yes — set any RegisterCommand-compatible key in <code>configs/keys.lua</code>. F4 is the default.</div>
+    </div>
+    <div class="faq__item">
+      <div class="faq__q">How does Wraith handle 6,000+ config entries?<span class="faq__plus">+</span></div>
+      <div class="faq__a">The Config Browser lazy-loads pages, debounces search, and keeps NPC/animal/vehicle lists in compact arrays. Open speed is identical whether you have 100 or 100,000 entries.</div>
+    </div>
+    <div class="faq__item">
+      <div class="faq__q">Can I extend the menu with my own modules?<span class="faq__plus">+</span></div>
+      <div class="faq__a">Yes. Drop a Lua file into <code>modules/</code> exporting a tree node. Wraith merges it into the main menu at boot. The "Missing Labels" tools help you ship clean.</div>
+    </div>
+    <div class="faq__item">
+      <div class="faq__q">Where do I report bugs?<span class="faq__plus">+</span></div>
+      <div class="faq__a">GitHub Issues on the repo, or our Discord <code>#bug-reports</code> channel. Both linked in the footer.</div>
+    </div>
+  </div>
+</section>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- ─── BIG CTA ─── -->
+<section class="cta-section">
+  <div class="cta-section__bg"></div>
+  <h2 class="reveal">Ride out with <em>Wraith.</em></h2>
+  <p class="reveal reveal--delay-1">Free, open-source, frontier-grade. Built by Lua heads, for Lua heads.</p>
+  <div class="cta-section__ctas reveal reveal--delay-2">
+    <a href="#" class="btn btn--primary">⤓ &nbsp;Download v1.0.0</a>
+    <a href="#" class="btn btn--ghost">★ &nbsp;Star on GitHub</a>
+  </div>
+</section>
 
-    <script>
-        // Initialize Lenis smooth scroll
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            orientation: 'vertical',
-            smoothWheel: true,
-        });
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <div class="footer__brand">WRAITH</div>
+      <p class="footer__tagline">A frontier-grade Lua extension for RedM. Free &amp; open source. Use at your own risk on servers you control.</p>
+    </div>
+    <div>
+      <h4>Project</h4>
+      <ul>
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">Releases</a></li>
+        <li><a href="#">Changelog</a></li>
+        <li><a href="#">Roadmap</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Community</h4>
+      <ul>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Showcase</a></li>
+        <li><a href="#">Contribute</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Docs</h4>
+      <ul>
+        <li><a href="#">Install Guide</a></li>
+        <li><a href="#">Module API</a></li>
+        <li><a href="#">Config Browser</a></li>
+        <li><a href="#">Troubleshooting</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 WRAITH · MIT</span>
+    <span>BUILD 1.0.0 · LUA 5.4 · REDM</span>
+  </div>
+</footer>
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        // Connect Lenis to GSAP ScrollTrigger
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-
-        // Custom cursor
-        const cursor = document.querySelector('.cursor');
-        const cursorDot = document.querySelector('.cursor-dot');
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            gsap.to(cursorDot, {
-                x: mouseX - 3,
-                y: mouseY - 3,
-                duration: 0.1
-            });
-        });
-
-        function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-
-            cursor.style.left = cursorX - 10 + 'px';
-            cursor.style.top = cursorY - 10 + 'px';
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Magnetic effect for buttons
-        document.querySelectorAll('.btn, .nav-cta').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-
-                gsap.to(btn, {
-                    x: x * 0.2,
-                    y: y * 0.2,
-                    duration: 0.3
-                });
-            });
-
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.3
-                });
-            });
-        });
-
-        // GSAP Animations
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Hero animations
-        const heroTimeline = gsap.timeline({ delay: 0.3 });
-
-        heroTimeline
-            .from('.hero-badge', {
-                opacity: 0,
-                y: 30,
-                duration: 0.8,
-                ease: 'power3.out'
-            })
-            .from('.hero-title .word', {
-                opacity: 0,
-                y: 80,
-                duration: 1,
-                stagger: 0.1,
-                ease: 'power4.out'
-            }, '-=0.4')
-            .from('.hero-subtitle', {
-                opacity: 0,
-                y: 30,
-                duration: 0.8,
-                ease: 'power3.out'
-            }, '-=0.6')
-            .from('.hero-cta', {
-                opacity: 0,
-                y: 30,
-                duration: 0.8,
-                ease: 'power3.out'
-            }, '-=0.4')
-            .from('.hero-visual', {
-                opacity: 0,
-                y: 60,
-                scale: 0.95,
-                duration: 1.2,
-                ease: 'power3.out'
-            }, '-=0.4');
-
-        // Section animations
-        document.querySelectorAll('.section-label').forEach(label => {
-            gsap.from(label, {
-                opacity: 0,
-                y: 30,
-                duration: 0.8,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: label,
-                    start: 'top 85%',
-                }
-            });
-        });
-
-        document.querySelectorAll('.section-title .word').forEach((word, i) => {
-            gsap.from(word, {
-                opacity: 0,
-                y: 40,
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: 'power4.out',
-                scrollTrigger: {
-                    trigger: word.closest('.section-title'),
-                    start: 'top 85%',
-                }
-            });
-        });
-
-        document.querySelectorAll('.section-desc').forEach(desc => {
-            gsap.from(desc, {
-                opacity: 0,
-                y: 20,
-                duration: 0.8,
-                delay: 0.4,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: desc,
-                    start: 'top 85%',
-                }
-            });
-        });
-
-        // Feature cards
-        gsap.utils.toArray('.feature-card').forEach((card, i) => {
-            gsap.from(card, {
-                opacity: 0,
-                y: 50,
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 85%',
-                }
-            });
-        });
-
-        // Code section
-        gsap.from('.code-content', {
-            opacity: 0,
-            x: -50,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.code-section',
-                start: 'top 70%',
-            }
-        });
-
-        gsap.from('.code-block', {
-            opacity: 0,
-            x: 50,
-            duration: 1,
-            delay: 0.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.code-section',
-                start: 'top 70%',
-            }
-        });
-
-        // Gallery items
-        gsap.utils.toArray('.gallery-item').forEach((item, i) => {
-            gsap.from(item, {
-                opacity: 0,
-                scale: 0.9,
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: item,
-                    start: 'top 85%',
-                }
-            });
-        });
-
-        // Stats counter animation
-        gsap.utils.toArray('.stat-item').forEach((item, i) => {
-            gsap.from(item, {
-                opacity: 0,
-                y: 30,
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: '.stats',
-                    start: 'top 75%',
-                }
-            });
-        });
-
-        // CTA section
-        gsap.utils.toArray('.cta-title .word').forEach((word, i) => {
-            gsap.from(word, {
-                opacity: 0,
-                y: 50,
-                duration: 0.8,
-                delay: i * 0.1,
-                ease: 'power4.out',
-                scrollTrigger: {
-                    trigger: '.cta',
-                    start: 'top 70%',
-                }
-            });
-        });
-
-        gsap.from('.cta-desc', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            delay: 0.3,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.cta',
-                start: 'top 70%',
-            }
-        });
-
-        gsap.from('.cta-buttons', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            delay: 0.4,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.cta',
-                start: 'top 70%',
-            }
-        });
-
-        // Parallax effects
-        gsap.to('.hero-visual', {
-            y: 100,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: '.hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1
-            }
-        });
-
-        gsap.to('.hero-bg', {
-            y: -50,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: '.hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1
-            }
-        });
-    </script>
+<script src="app.js"></script>
 </body>
 </html>
