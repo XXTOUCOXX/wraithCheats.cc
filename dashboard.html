@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard — WRAITH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body class="dashboard">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="#" class="back" id="logout-top">⏻ Logout</a>
+</nav>
+
+<div class="dash-shell">
+
+  <header class="dash-hero">
+    <div>
+      <div class="dash-hello">[ WELCOME BACK, RIDER ]</div>
+      <h1 class="dash-name">gunslinger_<em>42</em></h1>
+    </div>
+    <div class="dash-meta">
+      <strong>MEMBER #4271</strong>
+      <span>JOINED · APR 2026</span>
+    </div>
+  </header>
+
+  <div class="dash-grid">
+    <!-- LEFT column -->
+    <div>
+      <!-- License card -->
+      <div class="dash-card">
+        <div class="dash-card__head">
+          <div class="dash-card__title">[ 01 ] LICENSE STATUS</div>
+        </div>
+
+        <div class="license-status">
+          <div class="license-status__pulse"></div>
+          <div class="license-status__text">
+            <strong>ACTIVE</strong> · You own Wraith. The wraith rides with you.
+          </div>
+        </div>
+
+        <h2 class="dash-card__big">You own <em>Wraith</em>.</h2>
+
+        <dl class="license-info">
+          <div>
+            <dt>Tier</dt>
+            <dd>Lifetime</dd>
+          </div>
+          <div>
+            <dt>Activated</dt>
+            <dd>Apr 18, 2026</dd>
+          </div>
+          <div>
+            <dt>Expires</dt>
+            <dd>Never</dd>
+          </div>
+        </dl>
+
+        <div class="dash-card__title" style="margin-bottom: 8px">License Key</div>
+        <div class="key-display">
+          <span class="key-display__icon">🔑</span>
+          <span id="license-key">WRTH-A8K2-NCQ3-XX••-••••</span>
+          <button class="key-display__copy" id="reveal-btn">Reveal</button>
+          <button class="key-display__copy" id="copy-btn">Copy</button>
+        </div>
+      </div>
+
+      <!-- Redeem card -->
+      <div class="dash-card" style="margin-top: 24px">
+        <div class="dash-card__head">
+          <div class="dash-card__title">[ 02 ] REDEEM A KEY</div>
+        </div>
+        <h2 class="dash-card__big">Got another <em>key?</em></h2>
+        <p style="color: var(--bone-dim); font-size: 14px; line-height: 1.6; max-width: 520px">
+          Add additional licenses, gift codes, or promo keys to your account. They'll attach instantly and unlock any extra perks they carry.
+        </p>
+        <form class="redeem-form" id="redeem-form">
+          <input type="text" placeholder="WRTH-XXXX-XXXX-XXXX-XXXX" id="redeem-input" required>
+          <button type="submit">Redeem →</button>
+        </form>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="dash-card dash-recent" style="margin-top: 24px">
+        <div class="dash-card__head">
+          <div class="dash-card__title">[ 03 ] RECENT ACTIVITY</div>
+        </div>
+        <ul class="dash-recent__list">
+          <li class="dash-recent__item">
+            <span class="dash-recent__dot"></span>
+            <span>Successful sign-in from this browser</span>
+            <span class="dash-recent__time">JUST NOW</span>
+          </li>
+          <li class="dash-recent__item">
+            <span class="dash-recent__dot"></span>
+            <span>License activated · WRTH-A8K2-NCQ3</span>
+            <span class="dash-recent__time">7 DAYS AGO</span>
+          </li>
+          <li class="dash-recent__item">
+            <span class="dash-recent__dot"></span>
+            <span>Email verified</span>
+            <span class="dash-recent__time">7 DAYS AGO</span>
+          </li>
+          <li class="dash-recent__item">
+            <span class="dash-recent__dot"></span>
+            <span>Account created</span>
+            <span class="dash-recent__time">7 DAYS AGO</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT column -->
+    <aside class="dash-side">
+      <div class="dash-stat">
+        <div class="dash-stat__num">v1.0.0</div>
+        <div class="dash-stat__label">Latest Build</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat__num">0</div>
+        <div class="dash-stat__label">Active Sessions</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat__num">∞</div>
+        <div class="dash-stat__label">Days Remaining</div>
+      </div>
+
+      <div class="dash-card" style="padding: 28px">
+        <div class="dash-card__head">
+          <div class="dash-card__title">QUICK ACTIONS</div>
+        </div>
+        <div class="dash-actions">
+          <a href="#" class="dash-action">
+            <span>⤓ &nbsp;Download Wraith</span>
+            <span class="dash-action__chev">›</span>
+          </a>
+          <a href="#" class="dash-action">
+            <span>📜 &nbsp;Install Guide</span>
+            <span class="dash-action__chev">›</span>
+          </a>
+          <a href="#" class="dash-action">
+            <span>⟳ &nbsp;Change Password</span>
+            <span class="dash-action__chev">›</span>
+          </a>
+          <a href="#" class="dash-action">
+            <span>✉ &nbsp;Support</span>
+            <span class="dash-action__chev">›</span>
+          </a>
+          <a href="#" class="dash-action dash-action--logout" id="logout-btn">
+            <span>⏻ &nbsp;Logout</span>
+            <span class="dash-action__chev">›</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+let revealed = false;
+const realKey = 'WRTH-A8K2-NCQ3-X7QF-9ZP4';
+const masked  = 'WRTH-A8K2-NCQ3-XX••-••••';
+document.getElementById('reveal-btn').addEventListener('click', () => {
+  revealed = !revealed;
+  document.getElementById('license-key').textContent = revealed ? realKey : masked;
+  document.getElementById('reveal-btn').textContent = revealed ? 'Hide' : 'Reveal';
+});
+document.getElementById('copy-btn').addEventListener('click', () => {
+  navigator.clipboard?.writeText(realKey).catch(()=>{});
+  wraithToast('Key copied to clipboard');
+});
+
+document.getElementById('redeem-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const v = document.getElementById('redeem-input').value.trim();
+  if (!/^WRTH(-[A-Z0-9]{4}){4}$/.test(v.toUpperCase())) {
+    wraithToast('Invalid key format');
+    return;
+  }
+  wraithToast('Key redeemed successfully');
+  document.getElementById('redeem-input').value = '';
+});
+
+function logout() {
+  wraithToast('Signing out...');
+  setTimeout(() => { window.location.href = 'login.html'; }, 800);
+}
+document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+document.getElementById('logout-top').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+</script>
+</body>
+</html>

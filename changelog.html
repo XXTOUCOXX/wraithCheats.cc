@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Changelog — WRAITH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="mobile.css">
+<style>
+  body.changelog { display: block; padding: 100px 0 0; min-height: 100vh; }
+  .cl-shell { max-width: 1100px; margin: 0 auto; padding: 60px 48px 120px; }
+  .cl-head { text-align: center; margin-bottom: 80px; }
+  .cl-head h1 {
+    font-family: 'Rye', serif;
+    font-size: clamp(60px, 9vw, 130px);
+    color: var(--bone);
+    line-height: 0.95;
+    margin: 18px 0 18px;
+  }
+  .cl-head h1 em { color: var(--blood); font-style: normal; text-shadow: 0 0 30px rgba(193,39,45,0.5); }
+  .cl-head p { color: var(--bone-dim); max-width: 580px; margin: 0 auto; font-weight: 300; line-height: 1.7; }
+
+  .cl-list { position: relative; padding-left: 48px; }
+  .cl-list::before {
+    content: '';
+    position: absolute;
+    left: 12px; top: 16px; bottom: 16px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--blood) 0%, rgba(193,39,45,0.2) 100%);
+  }
+  .cl-entry {
+    position: relative;
+    padding: 28px 0 56px;
+  }
+  .cl-entry::before {
+    content: '';
+    position: absolute;
+    left: -42px;
+    top: 36px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--blood);
+    box-shadow: 0 0 0 3px var(--ink), 0 0 14px rgba(193,39,45,0.7);
+  }
+  .cl-entry--latest::before {
+    background: var(--blood-glow);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .cl-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .cl-version {
+    font-family: 'Rye', serif;
+    font-size: 38px;
+    color: var(--blood);
+    text-shadow: 0 0 20px rgba(193,39,45,0.4);
+    line-height: 1;
+  }
+  .cl-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    background: var(--blood);
+    padding: 4px 10px;
+  }
+  .cl-tag--minor { background: var(--rust); }
+  .cl-tag--patch { background: rgba(232,220,196,0.1); color: var(--bone-dim); }
+  .cl-date {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dust);
+  }
+  .cl-summary {
+    font-family: 'Rye', serif;
+    font-size: 26px;
+    color: var(--bone);
+    margin-bottom: 22px;
+    line-height: 1.2;
+  }
+  .cl-groups { display: grid; gap: 20px; }
+  .cl-group__label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+    border: 1px solid;
+  }
+  .cl-group__label.added    { color: #6fcf97; border-color: rgba(111,207,151,0.4); }
+  .cl-group__label.changed  { color: var(--blood); border-color: rgba(193,39,45,0.4); }
+  .cl-group__label.fixed    { color: #f0a030; border-color: rgba(240,160,48,0.4); }
+  .cl-group__label.removed  { color: #c47272; border-color: rgba(196,114,114,0.4); }
+  .cl-items { list-style: none; display: grid; gap: 8px; }
+  .cl-items li {
+    font-size: 14px;
+    color: var(--bone-dim);
+    line-height: 1.6;
+    font-weight: 300;
+    padding-left: 18px;
+    position: relative;
+  }
+  .cl-items li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--blood);
+  }
+  .cl-items li code {
+    background: rgba(193,39,45,0.12);
+    color: var(--blood);
+    padding: 1px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body class="changelog">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="Wraith Site.html" class="back">← Back to Site</a>
+</nav>
+
+<div class="cl-shell">
+
+  <header class="cl-head">
+    <div class="auth-card__eyebrow">[ RELEASE LOG ]</div>
+    <h1>Change<em>log</em>.</h1>
+    <p>Every shot fired since launch. Wraith updates auto-deliver to active licenses.</p>
+  </header>
+
+  <div class="cl-list">
+
+    <article class="cl-entry cl-entry--latest">
+      <div class="cl-meta">
+        <span class="cl-version">v1.0.0</span>
+        <span class="cl-tag">LATEST</span>
+        <span class="cl-date">APR 25, 2026</span>
+      </div>
+      <h2 class="cl-summary">Frontier launch — the wraith rides.</h2>
+      <div class="cl-groups">
+        <div>
+          <span class="cl-group__label added">+ ADDED</span>
+          <ul class="cl-items">
+            <li>Full hierarchical menu with 10 top-level categories</li>
+            <li>Model Library: 1,800+ NPCs, 200 animals, 106 horses, 116 vehicles, 1,400 objects</li>
+            <li>Player tools: heal, max stats, change ped, godmode, horse godmode</li>
+            <li>Movement: free-cam, noclip, invisibility, teleport-to-marker</li>
+            <li>Per-player toolkit: troll, props, spawn-on, gang/crowd, OP troll</li>
+            <li>Animals ESP with 3D / 2D boxes, chams, name, health, distance</li>
+            <li>Weather, time, and 2,500+ music event triggers</li>
+            <li>License-key activation tied to executor</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="cl-entry">
+      <div class="cl-meta">
+        <span class="cl-version">v0.9.4</span>
+        <span class="cl-tag cl-tag--patch">BETA</span>
+        <span class="cl-date">APR 18, 2026</span>
+      </div>
+      <h2 class="cl-summary">Closed-beta polish &amp; key activation.</h2>
+      <div class="cl-groups">
+        <div>
+          <span class="cl-group__label added">+ ADDED</span>
+          <ul class="cl-items">
+            <li>License-key dashboard with reveal &amp; copy</li>
+            <li>Email verification on register</li>
+            <li>Reset-password flow with 6-digit code</li>
+            <li>Notifications toggle, preview, queue clear</li>
+          </ul>
+        </div>
+        <div>
+          <span class="cl-group__label changed">~ CHANGED</span>
+          <ul class="cl-items">
+            <li>Renamed <code>Config Browser</code> → <code>Model Library</code></li>
+            <li>Compacted ped lists for faster open on lower-spec machines</li>
+          </ul>
+        </div>
+        <div>
+          <span class="cl-group__label fixed">! FIXED</span>
+          <ul class="cl-items">
+            <li>Aimbot occasionally stuck on first target after respawn</li>
+            <li>Crosshair (2) leaking through pause menu</li>
+            <li>Teleport-to-marker landing one tile west on snow biomes</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="cl-entry">
+      <div class="cl-meta">
+        <span class="cl-version">v0.9.0</span>
+        <span class="cl-tag cl-tag--minor">MINOR</span>
+        <span class="cl-date">APR 02, 2026</span>
+      </div>
+      <h2 class="cl-summary">Per-player toolkit lands.</h2>
+      <div class="cl-groups">
+        <div>
+          <span class="cl-group__label added">+ ADDED</span>
+          <ul class="cl-items">
+            <li>Players selector with full Troll / Props / Spawn-on submenus</li>
+            <li>Clone Attacker / Clone Follow / Clone Lasso variants</li>
+            <li>OP Troll: fake messages, fake announcements, lag tools</li>
+            <li>Server &amp; economy hooks for Bandera, Yellowstone, DRB, Dakota SV</li>
+          </ul>
+        </div>
+        <div>
+          <span class="cl-group__label changed">~ CHANGED</span>
+          <ul class="cl-items">
+            <li>Menu open/close transitions tightened (220ms → 140ms)</li>
+            <li>Bandolier UI accent color across all submenus</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="cl-entry">
+      <div class="cl-meta">
+        <span class="cl-version">v0.8.2</span>
+        <span class="cl-tag cl-tag--patch">PATCH</span>
+        <span class="cl-date">MAR 14, 2026</span>
+      </div>
+      <h2 class="cl-summary">Stability &amp; combat tuning.</h2>
+      <div class="cl-groups">
+        <div>
+          <span class="cl-group__label fixed">! FIXED</span>
+          <ul class="cl-items">
+            <li>Best Fighter toggle desyncing after horse mount</li>
+            <li>Infinite Ammo not respecting clip size on shotguns</li>
+            <li>Free-cam jitter on ultrawide aspect ratios</li>
+          </ul>
+        </div>
+        <div>
+          <span class="cl-group__label removed">- REMOVED</span>
+          <ul class="cl-items">
+            <li>Legacy "Crosshair (1)" placeholder (replaced by CROSSHAIR 1)</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="cl-entry">
+      <div class="cl-meta">
+        <span class="cl-version">v0.8.0</span>
+        <span class="cl-tag cl-tag--minor">MINOR</span>
+        <span class="cl-date">FEB 28, 2026</span>
+      </div>
+      <h2 class="cl-summary">Model Library &amp; Scooby Menu integration.</h2>
+      <div class="cl-groups">
+        <div>
+          <span class="cl-group__label added">+ ADDED</span>
+          <ul class="cl-items">
+            <li>Initial Scooby Menu hook — auto-loads in executor</li>
+            <li>Model Library with live filtering across full RedM model set</li>
+            <li>Weapons categorized: melee, pistols, revolvers, repeaters, rifles, shotguns, bows, throwables</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<script src="auth.js"></script>
+</body>
+</html>

@@ -1007,3 +1007,96 @@ body {
   transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .word-slide.in span { transform: translateY(0); }
+
+/* ─── COMPATIBILITY ─── */
+.compat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 56px;
+  align-items: center;
+  background: linear-gradient(180deg, var(--char) 0%, var(--ember) 100%);
+  border: 1px solid rgba(193,39,45,0.25);
+  padding: 48px 56px;
+  position: relative;
+  overflow: hidden;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.compat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blood), transparent);
+  animation: scan 3s ease-in-out infinite;
+}
+.compat__badge {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(193,39,45,0.4);
+  background: rgba(10,7,8,0.6);
+  flex-shrink: 0;
+}
+.compat__badge::before, .compat__badge::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border: 1px solid var(--blood);
+}
+.compat__badge::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.compat__badge::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+.compat__logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 16px rgba(193,39,45,0.4));
+  animation: compatFloat 4s ease-in-out infinite;
+}
+@keyframes compatFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-6px) rotate(2deg); }
+}
+.compat__pulse {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #6fcf97;
+  box-shadow: 0 0 10px #6fcf97;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.compat__eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--blood);
+  margin-bottom: 14px;
+}
+.compat__title {
+  font-family: 'Rye', serif;
+  font-size: clamp(36px, 4.5vw, 56px);
+  color: var(--bone);
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+.compat__title em {
+  color: var(--blood);
+  font-style: normal;
+  text-shadow: 0 0 24px rgba(193,39,45,0.5);
+}
+.compat__desc {
+  color: var(--bone-dim);
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 620px;
+}
+@media (max-width: 800px) {
+  .compat { grid-template-columns: 1fr; gap: 32px; padding: 36px; text-align: center; }
+  .compat__badge { margin: 0 auto; }
+  .compat__desc { margin: 0 auto; }
+}

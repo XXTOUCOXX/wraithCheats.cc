@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
 </head>
 <body>
 
@@ -19,13 +20,19 @@
 <!-- ─── NAV ─── -->
 <nav class="nav">
   <a href="#top" class="nav__brand">WRAITH</a>
+  <button class="nav__burger" aria-label="Toggle menu" onclick="document.body.classList.toggle('nav-open')">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav__links">
     <li><a href="#arsenal">Arsenal</a></li>
     <li><a href="#preview">Preview</a></li>
     <li><a href="#install">Install</a></li>
+    <li><a href="buy.html">Buy</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
     <li><a href="#faq">FAQ</a></li>
+    <li><a href="login.html">Sign In</a></li>
   </ul>
-  <a href="#install" class="nav__cta">Get Wraith</a>
+  <a href="buy.html" class="nav__cta">Buy Wraith</a>
 </nav>
 
 <!-- ─── HERO ─── -->
@@ -33,8 +40,143 @@
   <div class="hero__bg"></div>
   <canvas id="particles" class="hero__particles"></canvas>
 
+  <!-- Original gunslinger silhouette (red/black pop-art) -->
+  <svg class="gunslinger" viewBox="0 0 420 720" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="coatGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c1272d"/>
+        <stop offset="60%" stop-color="#8b1e1e"/>
+        <stop offset="100%" stop-color="#3a0a0a"/>
+      </linearGradient>
+      <radialGradient id="muzzleGrad" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stop-color="#fff5b0" stop-opacity="1"/>
+        <stop offset="40%" stop-color="#ff8a3a" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#c1272d" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Long duster coat — broad shape -->
+    <path d="M120 280
+             C 110 320, 95 380, 90 440
+             L 70 600
+             L 60 720 L 150 720
+             L 165 540
+             L 180 720 L 245 720
+             L 240 540
+             L 260 720 L 340 720
+             L 320 600
+             L 305 440
+             C 300 380, 290 330, 275 290
+             Z"
+          fill="url(#coatGrad)"/>
+
+    <!-- Coat shadow seams -->
+    <path d="M165 540 L155 720 M240 540 L255 720 M200 320 L200 540"
+          stroke="#0a0708" stroke-width="3" fill="none" opacity="0.55"/>
+
+    <!-- Shoulders / lapels -->
+    <path d="M130 280 Q 200 250 270 280 L 260 320 Q 200 295 140 320 Z"
+          fill="#0a0708"/>
+
+    <!-- Bandolier across chest (diagonal strap with bullets) -->
+    <path d="M135 305 L 295 410" stroke="#3a0a0a" stroke-width="14" stroke-linecap="round"/>
+    <g fill="#a89880">
+      <rect x="148" y="312" width="6" height="10" transform="rotate(34 151 317)"/>
+      <rect x="170" y="326" width="6" height="10" transform="rotate(34 173 331)"/>
+      <rect x="192" y="340" width="6" height="10" transform="rotate(34 195 345)"/>
+      <rect x="214" y="354" width="6" height="10" transform="rotate(34 217 359)"/>
+      <rect x="236" y="368" width="6" height="10" transform="rotate(34 239 373)"/>
+      <rect x="258" y="382" width="6" height="10" transform="rotate(34 261 387)"/>
+    </g>
+
+    <!-- Belt buckle -->
+    <rect x="180" y="430" width="40" height="20" fill="#a89880" stroke="#0a0708" stroke-width="2"/>
+    <rect x="190" y="436" width="20" height="8" fill="#0a0708"/>
+
+    <!-- Neck -->
+    <path d="M183 240 L 217 240 L 223 285 L 177 285 Z" fill="#3a0a0a"/>
+
+    <!-- Bandana / scarf -->
+    <path d="M170 270 Q 200 280 230 270 L 235 295 Q 200 305 165 295 Z" fill="#0a0708"/>
+
+    <!-- Head silhouette -->
+    <ellipse cx="200" cy="200" rx="44" ry="52" fill="#1a0708"/>
+
+    <!-- Beard / jaw shadow -->
+    <path d="M170 215 Q 200 250 230 215 L 226 240 Q 200 258 174 240 Z" fill="#0a0708"/>
+
+    <!-- Eyes (pinpoint glow) -->
+    <circle cx="187" cy="195" r="2" fill="#ff3a3a"/>
+    <circle cx="213" cy="195" r="2" fill="#ff3a3a"/>
+
+    <!-- Wide-brim cowboy hat -->
+    <path d="M118 168
+             Q 200 144 282 168
+             Q 290 178 282 184
+             Q 200 168 118 184
+             Q 110 178 118 168 Z"
+          fill="#0a0708"/>
+    <!-- Hat crown -->
+    <path d="M158 168
+             Q 162 122 200 116
+             Q 238 122 242 168
+             Z" fill="#0a0708"/>
+    <!-- Hat band -->
+    <path d="M160 158 Q 200 152 240 158 L 240 164 Q 200 158 160 164 Z" fill="#3a0a0a"/>
+
+    <!-- LEFT arm extended forward holding revolver -->
+    <path d="M275 320
+             Q 320 300 360 295
+             Q 380 300 385 315
+             Q 380 330 360 332
+             Q 320 335 275 350 Z"
+          fill="#8b1e1e"/>
+    <!-- Hand / cuff -->
+    <rect x="370" y="298" width="22" height="34" rx="3" fill="#0a0708"/>
+
+    <!-- Revolver -->
+    <g transform="translate(385,300)">
+      <!-- frame -->
+      <rect x="0" y="6" width="40" height="14" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+      <!-- cylinder -->
+      <circle cx="14" cy="13" r="9" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+      <circle cx="14" cy="13" r="3" fill="#0a0708"/>
+      <!-- barrel -->
+      <rect x="32" y="9" width="22" height="8" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+      <!-- grip -->
+      <path d="M0 20 L 6 38 L 16 38 L 14 20 Z" fill="#3a0a0a" stroke="#0a0708" stroke-width="1.5"/>
+      <!-- hammer -->
+      <rect x="6" y="2" width="6" height="6" fill="#0a0708"/>
+    </g>
+
+    <!-- Muzzle flash -->
+    <g class="gunslinger__muzzle" transform="translate(440,310)">
+      <circle cx="0" cy="0" r="22" fill="url(#muzzleGrad)"/>
+      <path d="M-4 -4 L 32 -14 L 4 -2 L 36 4 L 4 4 L 28 18 L -2 6 Z"
+            fill="#fff5b0" opacity="0.9"/>
+    </g>
+
+    <!-- RIGHT arm hanging at side, second pistol -->
+    <path d="M125 310
+             Q 110 380 105 460
+             L 130 470
+             Q 138 400 145 320 Z"
+          fill="#8b1e1e"/>
+    <rect x="98" y="455" width="20" height="28" fill="#0a0708"/>
+    <!-- holstered/lowered revolver hint -->
+    <g transform="translate(86,478)">
+      <rect x="0" y="0" width="32" height="10" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+      <circle cx="10" cy="5" r="6" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+      <rect x="-14" y="2" width="18" height="6" fill="#a89880" stroke="#0a0708" stroke-width="1.5"/>
+    </g>
+
+    <!-- Coat collar shadow -->
+    <path d="M150 280 L 200 310 L 250 280 L 245 305 L 200 325 L 155 305 Z"
+          fill="#0a0708" opacity="0.7"/>
+  </svg>
+
   <div class="hero__inner">
-    <div class="hero__eyebrow"><span class="dot"></span>BUILD 1.0.0 · LUA · REDM</div>
+    <div class="hero__eyebrow"><span class="dot"></span>BUILD 1.0.0 · LUA · REDM · SCOOBY MENU</div>
     <h1 class="hero__title" data-text="WRAITH">WRAITH</h1>
     <div class="hero__subtitle">A spectre on your server</div>
     <p class="hero__tagline">
@@ -43,7 +185,7 @@
       diagnostics — built for server owners, players and Lua tinkerers.
     </p>
     <div class="hero__ctas">
-      <a href="#install" class="btn btn--primary">⤓ &nbsp;Download Wraith</a>
+      <a href="buy.html" class="btn btn--primary">⤓ &nbsp;Buy a License</a>
       <a href="#arsenal" class="btn btn--ghost">Browse Arsenal →</a>
     </div>
 
@@ -57,6 +199,21 @@
   </div>
 
   <div class="scroll-hint">SCROLL · DRAW · FIRE</div>
+</section>
+
+<!-- ─── COMPATIBILITY ─── -->
+<section class="section" id="compatibility" style="padding-top: 80px; padding-bottom: 80px">
+  <div class="compat reveal">
+    <div class="compat__badge">
+      <img src="assets/scooby-logo.png" alt="Scooby Menu" class="compat__logo">
+      <span class="compat__pulse"></span>
+    </div>
+    <div class="compat__body">
+      <div class="compat__eyebrow">[ COMPATIBILITY ]</div>
+      <h3 class="compat__title">Built for <em>Scooby Menu</em>.</h3>
+      <p class="compat__desc"><strong style="color:var(--bone)">Scooby Menu is required.</strong> Wraith runs exclusively on top of it — after redeeming your key, load Wraith directly from inside Scooby. Don't have it? Grab it at <a href="https://scoobymenu.xyz/" target="_blank" rel="noopener" style="color:var(--blood);text-decoration:underline;text-underline-offset:3px">scoobymenu.xyz</a>. Support for additional executors and base menus is on the roadmap.</p>
+    </div>
+  </div>
 </section>
 
 <!-- ─── MARQUEE ─── -->
@@ -159,10 +316,10 @@
 
     <div class="feature feature--lg">
       <div>
-        <div class="feature__num">[ 09 ] CONFIG BROWSER</div>
+        <div class="feature__num">[ 09 ] MODEL LIBRARY</div>
         <div class="feature__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c1272d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 9h18M9 9v12M3 15h18"/></svg></div>
-        <h3 class="feature__title">Browse <em style="color:var(--blood);font-style:normal">every</em> game config</h3>
-        <p class="feature__desc">Live filtering across the full RedM data tables: <strong style="color:var(--bone)">~1,800 NPCs · 200 animals · 106 horses · 116 vehicles · 1,400 objects · 21 weather · 2,500 music events</strong>. Spawn or apply with one click.</p>
+        <h3 class="feature__title">Every <em style="color:var(--blood);font-style:normal">in-game</em> model, one click away</h3>
+        <p class="feature__desc">Live-filterable list of every model RedM ships with: <strong style="color:var(--bone)">~1,800 NPCs · 200 animals · 106 horses · 116 vehicles · 1,400 objects · 21 weather presets · 2,500 music events</strong>. Spawn or apply with one click.</p>
       </div>
       <div class="feature__count"><span>6 SUBMENUS</span><strong>~6,000 ENTRIES</strong></div>
     </div>
@@ -205,7 +362,7 @@
         <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">PLAYERS</span><span class="showcase__chev">›</span></li>
         <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">ESP / VISUALS</span><span class="showcase__chev">›</span></li>
         <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">DEBUG / CONSOLE</span><span class="showcase__chev">›</span></li>
-        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">CONFIG BROWSER</span><span class="showcase__chev">›</span></li>
+        <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">MODEL LIBRARY</span><span class="showcase__chev">›</span></li>
         <li class="showcase__item"><span class="showcase__tag">›</span><span class="showcase__name">NOTIFICATIONS</span><span class="showcase__chev">›</span></li>
       </ul>
     </div>
@@ -218,7 +375,7 @@
     <div class="section__index"><small>SECTION 03</small>Install</div>
     <div>
       <h2 class="section__title">Four steps. <em>One key.</em></h2>
-      <p class="section__intro">Drop in, list in <code>server.cfg</code>, reboot, press F4. That's it.</p>
+      <p class="section__intro">Buy, register, redeem your key, hit launch. The wraith arrives.</p>
     </div>
   </header>
 
@@ -227,23 +384,23 @@
     <div class="install__steps">
       <div class="install-step">
         <div class="install-step__num">01</div>
-        <div class="install-step__title">Download</div>
-        <div class="install-step__desc">Grab the latest release from GitHub. Place the <code>wraith</code> folder in <code>resources/</code>.</div>
+        <div class="install-step__title">Buy</div>
+        <div class="install-step__desc">Pick up a license from the <a href="buy.html" style="color:var(--blood);text-decoration:none">store</a>. One-time, lifetime updates.</div>
       </div>
       <div class="install-step">
         <div class="install-step__num">02</div>
         <div class="install-step__title">Register</div>
-        <div class="install-step__desc">Add <code>ensure wraith</code> to your <code>server.cfg</code>. No dependencies.</div>
+        <div class="install-step__desc">Create your account &amp; verify your email. Your dashboard opens up.</div>
       </div>
       <div class="install-step">
         <div class="install-step__num">03</div>
-        <div class="install-step__title">Boot</div>
-        <div class="install-step__desc">Restart your RedM server. Configs hot-load on first menu open.</div>
+        <div class="install-step__title">Redeem</div>
+        <div class="install-step__desc">Drop your license key into the dashboard. Wraith binds to your account.</div>
       </div>
       <div class="install-step">
         <div class="install-step__num">04</div>
         <div class="install-step__title">Open</div>
-        <div class="install-step__desc">Press <code>F4</code> in-game. The wraith arrives.</div>
+        <div class="install-step__desc">Wraith auto-loads in your executor. Hit <code>F4</code> in-game. The wraith arrives.</div>
       </div>
     </div>
 
@@ -278,16 +435,8 @@
       <div class="faq__a">Yes — set any RegisterCommand-compatible key in <code>configs/keys.lua</code>. F4 is the default.</div>
     </div>
     <div class="faq__item">
-      <div class="faq__q">How does Wraith handle 6,000+ config entries?<span class="faq__plus">+</span></div>
-      <div class="faq__a">The Config Browser lazy-loads pages, debounces search, and keeps NPC/animal/vehicle lists in compact arrays. Open speed is identical whether you have 100 or 100,000 entries.</div>
-    </div>
-    <div class="faq__item">
-      <div class="faq__q">Can I extend the menu with my own modules?<span class="faq__plus">+</span></div>
-      <div class="faq__a">Yes. Drop a Lua file into <code>modules/</code> exporting a tree node. Wraith merges it into the main menu at boot. The "Missing Labels" tools help you ship clean.</div>
-    </div>
-    <div class="faq__item">
       <div class="faq__q">Where do I report bugs?<span class="faq__plus">+</span></div>
-      <div class="faq__a">GitHub Issues on the repo, or our Discord <code>#bug-reports</code> channel. Both linked in the footer.</div>
+      <div class="faq__a">Open a ticket in our Discord <code>#bug-reports</code> channel. Linked in the footer.</div>
     </div>
   </div>
 </section>
@@ -296,10 +445,10 @@
 <section class="cta-section">
   <div class="cta-section__bg"></div>
   <h2 class="reveal">Ride out with <em>Wraith.</em></h2>
-  <p class="reveal reveal--delay-1">Free, open-source, frontier-grade. Built by Lua heads, for Lua heads.</p>
+  <p class="reveal reveal--delay-1">Premium frontier-grade tooling. Licensed per-user, key-activated, locked tight.</p>
   <div class="cta-section__ctas reveal reveal--delay-2">
-    <a href="#" class="btn btn--primary">⤓ &nbsp;Download v1.0.0</a>
-    <a href="#" class="btn btn--ghost">★ &nbsp;Star on GitHub</a>
+    <a href="buy.html" class="btn btn--primary">⤓ &nbsp;Get a License</a>
+    <a href="login.html" class="btn btn--ghost">↪ &nbsp;Sign In</a>
   </div>
 </section>
 
@@ -308,15 +457,15 @@
   <div class="footer__inner">
     <div>
       <div class="footer__brand">WRAITH</div>
-      <p class="footer__tagline">A frontier-grade Lua extension for RedM. Free &amp; open source. Use at your own risk on servers you control.</p>
+      <p class="footer__tagline">A premium Lua extension for RedM. License-key activated, per-user. Use at your own risk on servers you control.</p>
     </div>
     <div>
       <h4>Project</h4>
       <ul>
-        <li><a href="#">GitHub</a></li>
-        <li><a href="#">Releases</a></li>
-        <li><a href="#">Changelog</a></li>
-        <li><a href="#">Roadmap</a></li>
+        <li><a href="login.html">Sign In</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
       </ul>
     </div>
     <div>
@@ -333,17 +482,23 @@
       <ul>
         <li><a href="#">Install Guide</a></li>
         <li><a href="#">Module API</a></li>
-        <li><a href="#">Config Browser</a></li>
+        <li><a href="#">Model Library</a></li>
         <li><a href="#">Troubleshooting</a></li>
       </ul>
     </div>
   </div>
   <div class="footer__bottom">
-    <span>© 2026 WRAITH · MIT</span>
+    <span>© 2026 WRAITH · ALL RIGHTS RESERVED</span>
     <span>BUILD 1.0.0 · LUA 5.4 · REDM</span>
   </div>
 </footer>
 
 <script src="app.js"></script>
+<script>
+// Close mobile nav when a link is tapped
+document.querySelectorAll('.nav__links a').forEach(a => {
+  a.addEventListener('click', () => document.body.classList.remove('nav-open'));
+});
+</script>
 </body>
 </html>

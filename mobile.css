@@ -1,0 +1,348 @@
+/* ============================================
+   WRAITH — Mobile responsive stylesheet
+   Loaded after styles.css / auth.css.
+   Tablet ≤ 1024px · Phone ≤ 768px · Small phone ≤ 480px
+   ============================================ */
+
+/* ───── 0. GLOBAL OVERRIDES ───── */
+@media (max-width: 1024px) {
+  html, body { overflow-x: hidden; }
+  body { cursor: auto !important; }
+  /* Hide custom cursor on touch devices — saves perf + the dot/ring lag on touch */
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+/* ───── 1. NAV / HAMBURGER ───── */
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid rgba(193,39,45,0.4);
+  cursor: pointer;
+  padding: 0 8px;
+  z-index: 101;
+}
+.nav__burger span {
+  display: block;
+  height: 2px;
+  background: var(--bone, #ebe0c8);
+  transition: transform 0.25s, opacity 0.2s;
+  transform-origin: center;
+}
+.nav-open .nav__burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-open .nav__burger span:nth-child(2) { opacity: 0; }
+.nav-open .nav__burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 900px) {
+  .nav {
+    padding: 14px 20px !important;
+  }
+  .nav__brand { font-size: 22px !important; }
+  .nav__cta { display: none !important; }
+  .nav__burger { display: flex; }
+
+  .nav__links {
+    position: fixed !important;
+    top: 64px;
+    left: 0; right: 0;
+    flex-direction: column !important;
+    background: rgba(10, 8, 7, 0.97);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(193,39,45,0.3);
+    border-bottom: 1px solid rgba(193,39,45,0.3);
+    padding: 24px 24px 32px !important;
+    gap: 0 !important;
+    transform: translateY(-120%);
+    transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+    pointer-events: none;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  .nav-open .nav__links {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .nav__links li { width: 100%; }
+  .nav__links a {
+    display: block;
+    padding: 16px 0 !important;
+    font-size: 14px !important;
+    border-bottom: 1px solid rgba(232,220,196,0.06);
+    letter-spacing: 0.3em !important;
+  }
+  /* Auth-pages subnav */
+  .subnav {
+    padding: 14px 20px !important;
+  }
+}
+
+/* ───── 2. HERO ───── */
+@media (max-width: 900px) {
+  .hero {
+    padding: 120px 24px 80px !important;
+  }
+  .hero__inner { padding: 0 !important; }
+  .hero__eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 0.25em !important;
+    padding: 8px 12px !important;
+    flex-wrap: wrap;
+  }
+  .hero__title {
+    font-size: clamp(60px, 22vw, 110px) !important;
+    line-height: 0.9 !important;
+    word-break: break-word;
+  }
+  .hero__subtitle {
+    font-size: 14px !important;
+    letter-spacing: 0.3em !important;
+  }
+  .hero__tagline {
+    font-size: 15px !important;
+    line-height: 1.6;
+  }
+  .hero__ctas {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px !important;
+  }
+  .hero__ctas .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 24px !important;
+  }
+  .hero__stats {
+    gap: 24px !important;
+    padding-top: 32px;
+    border-top: 1px solid rgba(232,220,196,0.06);
+    margin-top: 32px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .hero__stats .stat { flex: 1 1 40%; min-width: 0; }
+  .stat__num { font-size: 32px !important; }
+  .stat__label { font-size: 9px !important; letter-spacing: 0.2em !important; }
+  .scroll-hint { display: none !important; }
+  .gunslinger { display: none !important; }
+}
+@media (max-width: 480px) {
+  .hero__title { font-size: 64px !important; }
+  .hero__stats { gap: 16px !important; }
+  .stat__num { font-size: 26px !important; }
+}
+
+/* ───── 3. MARQUEE ───── */
+@media (max-width: 900px) {
+  .marquee { padding: 14px 0 !important; font-size: 14px !important; }
+  .marquee__track { gap: 30px !important; }
+}
+
+/* ───── 4. SECTIONS / HEADERS ───── */
+@media (max-width: 900px) {
+  .section {
+    padding: 90px 24px !important;
+  }
+  .section__head {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    margin-bottom: 48px !important;
+  }
+  .section__index { font-size: 11px !important; letter-spacing: 0.3em !important; }
+  .section__title {
+    font-size: clamp(40px, 11vw, 72px) !important;
+    line-height: 0.95 !important;
+  }
+  .section__intro { font-size: 15px !important; }
+}
+
+/* ───── 5. FEATURES GRID ───── */
+@media (max-width: 900px) {
+  .features { gap: 12px !important; }
+  .feature {
+    grid-column: span 12 !important;
+    padding: 28px 24px !important;
+    min-height: 0 !important;
+  }
+  .feature__title { font-size: 24px !important; }
+  .feature__desc { font-size: 14px !important; }
+}
+
+/* ───── 6. SHOWCASE ───── */
+@media (max-width: 900px) {
+  .showcase { gap: 36px !important; }
+  .showcase__img-wrap { transform: none !important; }
+  .showcase__visual::before, .showcase__visual::after {
+    width: 24px !important; height: 24px !important;
+  }
+  .showcase__item {
+    padding: 14px 0 14px 18px !important;
+    font-size: 13px !important;
+  }
+  .showcase__item:hover { padding-left: 22px !important; }
+}
+
+/* ───── 7. INSTALL ───── */
+@media (max-width: 900px) {
+  .install__steps { grid-template-columns: 1fr !important; }
+  .install-step {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(232,220,196,0.08);
+    padding: 24px !important;
+  }
+  .install-step:last-child { border-bottom: none; }
+  .install-step__num { font-size: 48px !important; }
+  .terminal { margin-top: 32px !important; }
+  .terminal__head { font-size: 11px !important; padding: 10px 14px !important; }
+  .terminal__body {
+    padding: 18px 16px !important;
+    font-size: 12px !important;
+    overflow-x: auto;
+  }
+}
+
+/* ───── 8. FAQ ───── */
+@media (max-width: 900px) {
+  .faq__q {
+    font-size: 16px !important;
+    gap: 16px;
+  }
+  .faq__a {
+    font-size: 14px !important;
+  }
+}
+
+/* ───── 9. CTA SECTION ───── */
+@media (max-width: 900px) {
+  .cta-section { padding: 100px 24px !important; }
+  .cta-section h2 {
+    font-size: clamp(40px, 12vw, 72px) !important;
+  }
+  .cta-section__ctas {
+    flex-direction: column;
+    gap: 12px !important;
+  }
+  .cta-section__ctas .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ───── 10. FOOTER ───── */
+@media (max-width: 900px) {
+  .footer { padding: 60px 24px 32px !important; }
+  .footer__inner {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 36px !important;
+  }
+  .footer__brand { font-size: 40px !important; }
+  .footer__bottom {
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+    font-size: 10px !important;
+  }
+}
+@media (max-width: 480px) {
+  .footer__inner { grid-template-columns: 1fr !important; }
+}
+
+/* ───── 11. COMPATIBILITY ───── */
+@media (max-width: 900px) {
+  .compat {
+    padding: 32px 24px !important;
+    gap: 24px !important;
+  }
+  .compat__badge { width: 120px !important; height: 120px !important; }
+  .compat__logo { width: 80px !important; height: 80px !important; }
+  .compat__title { font-size: 32px !important; }
+  .compat__desc { font-size: 14px !important; }
+}
+
+/* ───── 12. AUTH PAGES (login / register / forgot / dashboard / buy / changelog) ───── */
+@media (max-width: 768px) {
+  .auth-shell, .buy-shell, .cl-shell, .dash-shell {
+    padding: 24px !important;
+  }
+  body.login, body.register, body.forgot, body.dash, body.buy, body.changelog {
+    padding-top: 80px !important;
+  }
+  .auth-card {
+    padding: 32px 24px !important;
+  }
+  .auth-card h1, .auth-card__title {
+    font-size: clamp(36px, 10vw, 56px) !important;
+  }
+  .auth-card__form input {
+    font-size: 15px !important;
+    padding: 14px !important;
+  }
+  .auth-card__btn {
+    padding: 16px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Buy page plans */
+@media (max-width: 900px) {
+  .plans { gap: 20px !important; }
+  .plan { padding: 32px 24px !important; }
+  .plan--featured { padding-top: 52px !important; }
+  .plan__title { font-size: 28px !important; }
+  .plan__amount { font-size: 56px !important; }
+  .plan__list li { font-size: 12px !important; }
+  .buy-trust {
+    gap: 20px !important;
+    font-size: 10px !important;
+  }
+  .notice { padding: 24px 22px 26px !important; }
+  .notice__title { font-size: 22px !important; }
+  .notice__body { font-size: 13px !important; }
+  .notice__steps li { font-size: 12px !important; gap: 10px; }
+  .buy-head h1 { font-size: clamp(48px, 12vw, 80px) !important; }
+}
+
+/* Changelog */
+@media (max-width: 768px) {
+  .cl-shell { padding: 24px 20px 80px !important; }
+  .cl-list { padding-left: 28px !important; }
+  .cl-list::before { left: 6px !important; }
+  .cl-entry { padding: 16px 0 40px !important; }
+  .cl-entry::before { left: -27px !important; top: 24px !important; width: 11px !important; height: 11px !important; }
+  .cl-meta { gap: 10px !important; }
+  .cl-version { font-size: 28px !important; }
+  .cl-date {
+    margin-left: 0 !important;
+    width: 100%;
+    font-size: 10px !important;
+  }
+  .cl-summary { font-size: 18px !important; }
+  .cl-items li { font-size: 13px !important; }
+  .cl-head h1 { font-size: clamp(48px, 12vw, 80px) !important; }
+}
+
+/* Dashboard */
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+  .dash-card { padding: 24px !important; }
+  .dash-key { font-size: 14px !important; word-break: break-all; }
+}
+
+/* ───── 13. GLOBAL TYPE TIGHTENING ───── */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+  h1, h2, h3 { word-break: break-word; }
+}
+
+/* ───── 14. REDUCED MOTION RESPECT ───── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

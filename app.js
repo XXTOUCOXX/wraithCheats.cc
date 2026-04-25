@@ -169,11 +169,10 @@ if (rainCanvas) {
 const term = document.querySelector('.terminal__body');
 if (term) {
   const lines = [
-    { type: 'cmd', text: 'cd resources && git clone https://github.com/wraith/wraith.git' },
-    { type: 'out', text: 'Cloning into \'wraith\'... done.' },
-    { type: 'cmd', text: 'echo "ensure wraith" >> server.cfg' },
-    { type: 'cmd', text: 'redm-server start' },
-    { type: 'out', text: '[wraith] Loading 1,800+ ped configs...' },
+    { type: 'cmd', text: 'wraith --activate WRTH-XXXX-XXXX-XXXX' },
+    { type: 'out', text: '[wraith] Verifying license key...' },
+    { type: 'ok',  text: '[wraith] ✓ License valid · bound to gunslinger_42' },
+    { type: 'out', text: '[wraith] Loading 1,800+ ped models...' },
     { type: 'out', text: '[wraith] Loading 116 vehicles, 106 horses...' },
     { type: 'out', text: '[wraith] Hooking native menus...' },
     { type: 'ok',  text: '[wraith] ✓ ready — press F4 in-game' },

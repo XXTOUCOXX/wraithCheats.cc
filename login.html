@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign In — WRAITH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body class="auth">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="Wraith Site.html" class="back">← Back to Site</a>
+</nav>
+
+<div class="auth-card">
+  <div class="auth-card__top">
+    <a href="Wraith Site.html" class="auth-card__brand">WRAITH</a>
+    <div class="auth-card__eyebrow">[ SECURE TERMINAL ]</div>
+    <h1 class="auth-card__title">Sign in</h1>
+    <p class="auth-card__sub">Enter your credentials to access your dashboard and license.</p>
+  </div>
+
+  <form id="login-form" autocomplete="off">
+    <div class="field">
+      <label class="field__label" for="username">Username</label>
+      <input class="field__input" type="text" id="username" name="username" placeholder="gunslinger_42" required>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="password">Password</label>
+      <input class="field__input" type="password" id="password" name="password" placeholder="••••••••••" required>
+    </div>
+
+    <div class="field__row">
+      <label class="checkbox">
+        <input type="checkbox" name="remember" checked>
+        <span class="checkbox__box"></span>
+        <span>Remember me</span>
+      </label>
+      <a href="forgot.html" class="field__link">Forgot password?</a>
+    </div>
+
+    <button type="submit" class="btn btn--primary btn--full">Sign in →</button>
+  </form>
+
+  <div class="auth-divider">— OR —</div>
+  <div class="auth-alt">
+    No account yet? <a href="register.html">Get a license →</a>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+document.getElementById('login-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  wraithToast('Signing in...');
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+});
+</script>
+</body>
+</html>

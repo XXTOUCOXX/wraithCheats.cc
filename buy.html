@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Buy Wraith — License</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="mobile.css">
+<style>
+  body.buy { display: block; padding: 100px 0 0; min-height: 100vh; }
+  .buy-shell { max-width: 1400px; margin: 0 auto; padding: 60px 48px 120px; }
+  .buy-head { text-align: center; margin-bottom: 80px; }
+  .buy-head .auth-card__eyebrow { margin-bottom: 18px; }
+  .buy-head h1 {
+    font-family: 'Rye', serif;
+    font-size: clamp(60px, 9vw, 140px);
+    color: var(--bone);
+    line-height: 0.95;
+    margin-bottom: 24px;
+  }
+  .buy-head h1 em { color: var(--blood); font-style: normal; text-shadow: 0 0 30px rgba(193,39,45,0.5); }
+  .buy-head p { color: var(--bone-dim); max-width: 620px; margin: 0 auto; font-weight: 300; line-height: 1.7; font-size: 17px; }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1000px) { .plans { grid-template-columns: 1fr; } }
+  .plans--single {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+
+  .plan {
+    background: linear-gradient(180deg, var(--char) 0%, var(--ember) 100%);
+    border: 1px solid rgba(232,220,196,0.08);
+    padding: 40px 36px;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .plan:hover {
+    transform: translateY(-6px);
+    border-color: var(--blood);
+    box-shadow: 0 30px 60px -20px rgba(193,39,45,0.4);
+  }
+  .plan--featured {
+    border-color: var(--blood);
+    box-shadow: 0 30px 80px -20px rgba(193,39,45,0.5);
+  }
+  .plan--featured::before {
+    content: '★ MOST POPULAR';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px;
+    background: var(--blood);
+    color: var(--bone);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8px;
+  }
+  .plan--featured { padding-top: 60px; }
+
+  /* Read-before-buy notice */
+  .notice {
+    margin: 0 auto 56px;
+    max-width: 760px;
+    background: linear-gradient(180deg, rgba(193,39,45,0.10), rgba(193,39,45,0.02));
+    border: 1px solid rgba(193,39,45,0.45);
+    border-left: 3px solid var(--blood);
+    padding: 28px 32px 30px;
+    position: relative;
+  }
+  .notice::before {
+    content: '!';
+    position: absolute;
+    top: -16px; left: 24px;
+    width: 32px; height: 32px;
+    background: var(--blood);
+    color: var(--bone);
+    font-family: 'Rye', serif;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(193,39,45,0.5);
+  }
+  .notice__head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 12px;
+  }
+  .notice__title {
+    font-family: 'Rye', serif;
+    font-size: 26px;
+    color: var(--bone);
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .notice__title em { color: var(--blood); font-style: normal; }
+  .notice__body {
+    color: var(--bone-dim);
+    font-size: 14px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .notice__steps {
+    list-style: none;
+    margin-top: 18px;
+    display: grid;
+    gap: 8px;
+  }
+  .notice__steps li {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--bone-dim);
+    letter-spacing: 0.04em;
+  }
+  .notice__steps li b {
+    color: var(--blood);
+    font-weight: 700;
+    min-width: 24px;
+  }
+  .notice__steps li strong {
+    color: var(--bone);
+    font-weight: 500;
+  }
+  .notice a.notice__link {
+    color: var(--blood);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+  }
+  .notice a.notice__link:hover { color: var(--blood-glow); }
+
+  .plan__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 10px;
+  }
+  .plan__title {
+    font-family: 'Rye', serif;
+    font-size: 36px;
+    color: var(--bone);
+    margin-bottom: 18px;
+    line-height: 1.05;
+  }
+  .plan__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .plan__currency {
+    font-family: 'Rye', serif;
+    font-size: 28px;
+    color: var(--blood);
+  }
+  .plan__amount {
+    font-family: 'Rye', serif;
+    font-size: 72px;
+    color: var(--blood);
+    line-height: 1;
+    text-shadow: 0 0 24px rgba(193,39,45,0.45);
+  }
+  .plan__per {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dust);
+    letter-spacing: 0.15em;
+  }
+  .plan__desc {
+    color: var(--bone-dim);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 18px 0 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(232,220,196,0.08);
+    font-weight: 300;
+  }
+  .plan__list { list-style: none; margin-bottom: 36px; }
+  .plan__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--bone-dim);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+  }
+  .plan__list li::before {
+    content: '✓';
+    color: var(--blood);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .plan__list li.muted { opacity: 0.4; }
+  .plan__list li.muted::before { content: '·'; color: var(--rust); }
+
+  .plan__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: transparent;
+    color: var(--bone);
+    border: 1px solid rgba(232,220,196,0.2);
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .plan__cta:hover {
+    background: var(--blood);
+    border-color: var(--blood);
+    box-shadow: 0 8px 32px rgba(193,39,45,0.5);
+    transform: translateY(-2px);
+  }
+  .plan--featured .plan__cta {
+    background: var(--blood);
+    border-color: var(--blood);
+  }
+  .plan--featured .plan__cta:hover {
+    background: var(--blood-glow);
+    border-color: var(--blood-glow);
+    box-shadow: 0 8px 40px rgba(255,58,58,0.7);
+  }
+
+  .buy-trust {
+    margin-top: 80px;
+    text-align: center;
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: var(--dust);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .buy-trust span { display: inline-flex; align-items: center; gap: 8px; }
+  .buy-trust span::before {
+    content: '✓';
+    color: var(--blood);
+    font-size: 14px;
+  }
+
+  .buy-faq {
+    max-width: 800px;
+    margin: 100px auto 0;
+  }
+</style>
+</head>
+<body class="buy">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="Wraith Site.html" class="back">← Back to Site</a>
+</nav>
+
+<div class="buy-shell">
+
+  <header class="buy-head">
+    <div class="auth-card__eyebrow">[ LICENSE STORE ]</div>
+    <h1>Buy <em>Wraith</em>.</h1>
+    <p>One-time purchase. Per-user license key. Lifetime updates included. The wraith arrives within 60 seconds of payment.</p>
+  </header>
+
+  <aside class="notice">
+    <div class="notice__head">[ READ BEFORE YOU BUY ]</div>
+    <h2 class="notice__title">Scooby Menu is <em>required</em>.</h2>
+    <p class="notice__body">
+      Wraith is an extension that runs <strong style="color:var(--bone)">on top of Scooby Menu</strong>.
+      You must own and have Scooby installed before purchasing — without it, Wraith cannot load.
+      Get it at <a href="https://scoobymenu.xyz/" target="_blank" rel="noopener" class="notice__link">scoobymenu.xyz</a>.
+    </p>
+    <ol class="notice__steps">
+      <li><b>1</b><span><strong>Get Scooby Menu</strong> from <a href="https://scoobymenu.xyz/" target="_blank" rel="noopener" class="notice__link">scoobymenu.xyz</a></span></li>
+      <li><b>2</b><span><strong>Buy Wraith</strong> below — receive your license key instantly</span></li>
+      <li><b>3</b><span><strong>Redeem</strong> the key in your account dashboard</span></li>
+      <li><b>4</b><span><strong>Load Wraith</strong> directly from inside Scooby Menu</span></li>
+    </ol>
+  </aside>
+
+  <div class="plans plans--single">
+
+    <div class="plan plan--featured">
+      <div class="plan__name">[ LIFETIME LICENSE ]</div>
+      <h2 class="plan__title">Wraith</h2>
+      <div class="plan__price">
+        <span class="plan__currency">$</span>
+        <span class="plan__amount">49.99</span>
+      </div>
+      <div class="plan__per">ONE-TIME · LIFETIME ACCESS</div>
+      <p class="plan__desc">Pay once. Ride forever. Per-user license key with lifetime updates and full feature access.</p>
+      <ul class="plan__list">
+        <li>All 10 menu categories</li>
+        <li>Full Config Browser (~6,000 entries)</li>
+        <li><strong style="color:var(--bone)">Lifetime updates</strong></li>
+        <li>Priority Discord support</li>
+        <li>Early access to beta builds</li>
+        <li>Module API access</li>
+        <li>1 license key transfer per year</li>
+        <li>Per-user activation</li>
+      </ul>
+      <a href="#checkout" class="plan__cta" data-plan="wraith">Buy Wraith →</a>
+    </div>
+
+  </div>
+
+  <div class="buy-trust">
+    <span>Instant key delivery</span>
+    <span>7-day refund policy</span>
+    <span>Stripe / PayPal / Crypto</span>
+    <span>Per-user activation</span>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+document.querySelectorAll('[data-plan]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const plan = btn.dataset.plan;
+    wraithToast('Redirecting to checkout · ' + plan.toUpperCase());
+    setTimeout(() => {
+      // Replace with your actual store URL
+      window.location.href = 'https://store.wraith.example/checkout?plan=' + plan;
+    }, 900);
+  });
+});
+</script>
+</body>
+</html>
