@@ -239,10 +239,30 @@ function initDashboard() {
     if (tierEl && tier) tierEl.textContent = tier;
   }
 
+  function formatPortalDate(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  function setActivatedAt(value) {
+    const dds = document.querySelectorAll('.license-info dd');
+    const formatted = formatPortalDate(value);
+    if (dds[1] && formatted) dds[1].textContent = formatted;
+  }
+
   async function loadDashboard() {
     let session;
     const cachedCustomer = getCachedCustomer();
-    if (cachedCustomer) setTier(getTierFromSubscriptions(cachedCustomer.subscriptions));
+    if (cachedCustomer) {
+      setTier(getTierFromSubscriptions(cachedCustomer.subscriptions));
+      setActivatedAt(cachedCustomer.created_at);
+    }
 
     try {
       session = await api('GET', '/auth/session');
@@ -250,6 +270,7 @@ function initDashboard() {
       const user = session.customer || session.user || session;
       if (user) localStorage.setItem(CUSTOMER_KEY, JSON.stringify(user));
       setTier(getTierFromSubscriptions(user.subscriptions));
+      setActivatedAt(user.created_at);
     } catch (err) {
       if (err._status === 401 || err._status === 403) {
         localStorage.removeItem(TOKEN_KEY);
@@ -308,12 +329,7 @@ function initDashboard() {
     }
 
     const dds = document.querySelectorAll('.license-info dd');
-    const activatedAt = sub.activatedAt || sub.activated_at;
-    if (dds[1] && activatedAt) {
-      dds[1].textContent = new Date(activatedAt).toLocaleString('en-US', {
-        month: 'short', day: 'numeric', year: 'numeric'
-      });
-    }
+    setActivatedAt(sub.created_at);
     const expiresAtVal = sub.expiresAt || sub.expires_at;
     if (dds[2]) dds[2].textContent = expiresAtVal ? new Date(expiresAtVal).toLocaleDateString() : 'Never';
 
