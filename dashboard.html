@@ -19,20 +19,23 @@
 <div class="vignette"></div>
 
 <nav class="subnav">
-  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="index.html" class="brand">WRAITH</a>
   <a href="#" class="back" id="logout-top">⏻ Logout</a>
 </nav>
 
 <div class="dash-shell">
 
   <header class="dash-hero">
-    <div>
-      <div class="dash-hello">[ WELCOME BACK, RIDER ]</div>
-      <h1 class="dash-name">gunslinger_<em>42</em></h1>
+    <div style="display:flex;align-items:center;gap:18px">
+      <img id="dash-pfp" src="" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:none;border:2px solid var(--blood)">
+      <div>
+        <div class="dash-hello">[ WELCOME BACK, RIDER ]</div>
+        <h1 class="dash-name">—</h1>
+      </div>
     </div>
     <div class="dash-meta">
-      <strong>MEMBER #4271</strong>
-      <span>JOINED · APR 2026</span>
+      <strong>—</strong>
+      <span>—</span>
     </div>
   </header>
 
@@ -57,25 +60,18 @@
         <dl class="license-info">
           <div>
             <dt>Tier</dt>
-            <dd>Lifetime</dd>
+            <dd>—</dd>
           </div>
           <div>
             <dt>Activated</dt>
-            <dd>Apr 18, 2026</dd>
+            <dd>—</dd>
           </div>
           <div>
             <dt>Expires</dt>
-            <dd>Never</dd>
+            <dd>—</dd>
           </div>
         </dl>
 
-        <div class="dash-card__title" style="margin-bottom: 8px">License Key</div>
-        <div class="key-display">
-          <span class="key-display__icon">🔑</span>
-          <span id="license-key">WRTH-A8K2-NCQ3-XX••-••••</span>
-          <button class="key-display__copy" id="reveal-btn">Reveal</button>
-          <button class="key-display__copy" id="copy-btn">Copy</button>
-        </div>
       </div>
 
       <!-- Redeem card -->
@@ -93,48 +89,16 @@
         </form>
       </div>
 
-      <!-- Recent activity -->
-      <div class="dash-card dash-recent" style="margin-top: 24px">
-        <div class="dash-card__head">
-          <div class="dash-card__title">[ 03 ] RECENT ACTIVITY</div>
-        </div>
-        <ul class="dash-recent__list">
-          <li class="dash-recent__item">
-            <span class="dash-recent__dot"></span>
-            <span>Successful sign-in from this browser</span>
-            <span class="dash-recent__time">JUST NOW</span>
-          </li>
-          <li class="dash-recent__item">
-            <span class="dash-recent__dot"></span>
-            <span>License activated · WRTH-A8K2-NCQ3</span>
-            <span class="dash-recent__time">7 DAYS AGO</span>
-          </li>
-          <li class="dash-recent__item">
-            <span class="dash-recent__dot"></span>
-            <span>Email verified</span>
-            <span class="dash-recent__time">7 DAYS AGO</span>
-          </li>
-          <li class="dash-recent__item">
-            <span class="dash-recent__dot"></span>
-            <span>Account created</span>
-            <span class="dash-recent__time">7 DAYS AGO</span>
-          </li>
-        </ul>
-      </div>
     </div>
 
     <!-- RIGHT column -->
     <aside class="dash-side">
       <div class="dash-stat">
-        <div class="dash-stat__num">v1.0.0</div>
+        <div class="dash-stat__num" id="stat-build">v1.0.0</div>
         <div class="dash-stat__label">Latest Build</div>
       </div>
       <div class="dash-stat">
-        <div class="dash-stat__num">0</div>
-        <div class="dash-stat__label">Active Sessions</div>
-      </div>
-      <div class="dash-stat">
-        <div class="dash-stat__num">∞</div>
+        <div class="dash-stat__num" id="stat-days">∞</div>
         <div class="dash-stat__label">Days Remaining</div>
       </div>
 
@@ -170,37 +134,6 @@
 </div>
 
 <script src="auth.js"></script>
-<script>
-let revealed = false;
-const realKey = 'WRTH-A8K2-NCQ3-X7QF-9ZP4';
-const masked  = 'WRTH-A8K2-NCQ3-XX••-••••';
-document.getElementById('reveal-btn').addEventListener('click', () => {
-  revealed = !revealed;
-  document.getElementById('license-key').textContent = revealed ? realKey : masked;
-  document.getElementById('reveal-btn').textContent = revealed ? 'Hide' : 'Reveal';
-});
-document.getElementById('copy-btn').addEventListener('click', () => {
-  navigator.clipboard?.writeText(realKey).catch(()=>{});
-  wraithToast('Key copied to clipboard');
-});
-
-document.getElementById('redeem-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const v = document.getElementById('redeem-input').value.trim();
-  if (!/^WRTH(-[A-Z0-9]{4}){4}$/.test(v.toUpperCase())) {
-    wraithToast('Invalid key format');
-    return;
-  }
-  wraithToast('Key redeemed successfully');
-  document.getElementById('redeem-input').value = '';
-});
-
-function logout() {
-  wraithToast('Signing out...');
-  setTimeout(() => { window.location.href = 'login.html'; }, 800);
-}
-document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); logout(); });
-document.getElementById('logout-top').addEventListener('click', (e) => { e.preventDefault(); logout(); });
-</script>
+<script src="portal.js"></script>
 </body>
 </html>

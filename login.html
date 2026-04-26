@@ -19,13 +19,13 @@
 <div class="vignette"></div>
 
 <nav class="subnav">
-  <a href="Wraith Site.html" class="brand">WRAITH</a>
-  <a href="Wraith Site.html" class="back">← Back to Site</a>
+  <a href="index.html" class="brand">WRAITH</a>
+  <a href="index.html" class="back">← Back to Site</a>
 </nav>
 
 <div class="auth-card">
   <div class="auth-card__top">
-    <a href="Wraith Site.html" class="auth-card__brand">WRAITH</a>
+    <a href="index.html" class="auth-card__brand">WRAITH</a>
     <div class="auth-card__eyebrow">[ SECURE TERMINAL ]</div>
     <h1 class="auth-card__title">Sign in</h1>
     <p class="auth-card__sub">Enter your credentials to access your dashboard and license.</p>
@@ -61,12 +61,6 @@
 </div>
 
 <script src="auth.js"></script>
-<script>
-document.getElementById('login-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  wraithToast('Signing in...');
-  setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
-});
-</script>
+<script src="portal.js"></script>
 </body>
 </html>

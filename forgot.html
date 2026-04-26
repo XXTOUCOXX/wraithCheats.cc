@@ -19,13 +19,13 @@
 <div class="vignette"></div>
 
 <nav class="subnav">
-  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="index.html" class="brand">WRAITH</a>
   <a href="login.html" class="back">← Back to Sign In</a>
 </nav>
 
 <div class="auth-card">
   <div class="auth-card__top">
-    <a href="Wraith Site.html" class="auth-card__brand">WRAITH</a>
+    <a href="index.html" class="auth-card__brand">WRAITH</a>
     <div class="auth-card__eyebrow">[ RECOVERY ]</div>
   </div>
 
@@ -106,47 +106,6 @@
 </div>
 
 <script src="auth.js"></script>
-<script>
-const panes = document.querySelectorAll('.step-pane');
-const dots  = document.querySelectorAll('.steps__dot');
-const lines = document.querySelectorAll('.steps__line');
-function goStep(n) {
-  panes.forEach(p => p.classList.toggle('active', +p.dataset.pane === n));
-  dots.forEach((d, i) => {
-    d.classList.toggle('active', i + 1 === n);
-    d.classList.toggle('done', i + 1 < n);
-  });
-  lines.forEach((l, i) => l.classList.toggle('done', i + 1 < n));
-}
-
-document.getElementById('forgot-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('forgot-email').value;
-  document.getElementById('forgot-email-target').textContent = email;
-  wraithToast('Reset code sent');
-  goStep(2);
-  document.querySelectorAll('[data-resend]').forEach(b => wraithResend(b, 30));
-});
-
-document.getElementById('forgot-verify').addEventListener('click', () => {
-  const inputs = document.querySelectorAll('#forgot-codebox input');
-  const code = [...inputs].map(i => i.value).join('');
-  if (code.length < 6) {
-    wraithToast('Enter all 6 digits');
-    return;
-  }
-  wraithToast('Code verified');
-  setTimeout(() => goStep(3), 500);
-});
-
-document.getElementById('reset-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const a = document.getElementById('new-pw').value;
-  const b = document.getElementById('confirm-pw').value;
-  if (a !== b) { wraithToast('Passwords do not match'); return; }
-  wraithToast('Password reset. Signing in...');
-  setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
-});
-</script>
+<script src="portal.js"></script>
 </body>
 </html>

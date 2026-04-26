@@ -19,13 +19,13 @@
 <div class="vignette"></div>
 
 <nav class="subnav">
-  <a href="Wraith Site.html" class="brand">WRAITH</a>
-  <a href="Wraith Site.html" class="back">← Back to Site</a>
+  <a href="index.html" class="brand">WRAITH</a>
+  <a href="index.html" class="back">← Back to Site</a>
 </nav>
 
 <div class="auth-card">
   <div class="auth-card__top">
-    <a href="Wraith Site.html" class="auth-card__brand">WRAITH</a>
+    <a href="index.html" class="auth-card__brand">WRAITH</a>
     <div class="auth-card__eyebrow">[ NEW RIDER ]</div>
   </div>
 
@@ -109,44 +109,6 @@
 </div>
 
 <script src="auth.js"></script>
-<script>
-const panes = document.querySelectorAll('.step-pane');
-const dots  = document.querySelectorAll('.steps__dot');
-const lines = document.querySelectorAll('.steps__line');
-function goStep(n) {
-  panes.forEach(p => p.classList.toggle('active', +p.dataset.pane === n));
-  dots.forEach((d, i) => {
-    d.classList.toggle('active', i + 1 === n);
-    d.classList.toggle('done', i + 1 < n);
-  });
-  lines.forEach((l, i) => l.classList.toggle('done', i + 1 < n));
-}
-
-document.getElementById('register-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('reg-email').value;
-  document.getElementById('email-target').textContent = email;
-  wraithToast('Code sent to ' + email);
-  goStep(2);
-  // setup resend timer for the new view
-  document.querySelectorAll('[data-resend]').forEach(b => wraithResend(b, 30));
-});
-
-document.getElementById('verify-btn').addEventListener('click', () => {
-  const inputs = document.querySelectorAll('#reg-codebox input');
-  const code = [...inputs].map(i => i.value).join('');
-  if (code.length < 6) {
-    wraithToast('Enter all 6 digits');
-    return;
-  }
-  wraithToast('Email verified');
-  setTimeout(() => goStep(3), 600);
-});
-
-document.getElementById('back-to-1').addEventListener('click', (e) => {
-  e.preventDefault();
-  goStep(1);
-});
-</script>
+<script src="portal.js"></script>
 </body>
 </html>
