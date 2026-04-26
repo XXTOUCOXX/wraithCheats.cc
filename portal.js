@@ -228,10 +228,11 @@ function initDashboard() {
       const m = user.username.match(/^(.*?)(\d+)$/);
       nameEl.innerHTML = m ? `${m[1]}<em>${m[2]}</em>` : user.username;
     }
-    const pfp = document.getElementById('dash-pfp');
-    if (pfp && user.profile_picture) {
-      pfp.src = user.profile_picture;
-      pfp.style.display = 'block';
+    const pfp  = document.getElementById('dash-pfp');
+    const wrap = document.getElementById('pfp-wrap');
+    if (pfp && wrap) {
+      if (user.profile_picture) pfp.src = user.profile_picture;
+      wrap.style.display = 'block';
     }
   }
 
@@ -286,12 +287,12 @@ function initDashboard() {
   document.getElementById('redeem-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = document.getElementById('redeem-input');
-    const v     = input.value.trim().toUpperCase();
-    if (!/^WRTH(-[A-Z0-9]{4}){4}$/.test(v)) { wraithToast('Invalid key format'); return; }
+    const v     = input.value.trim();
+    if (!v) { wraithToast('Enter a key'); return; }
     const btn = e.target.querySelector('button[type="submit"]');
     setLoading(btn, true);
     try {
-      await api('POST', '/auth/redeem-key', { key: v });
+      await api('POST', '/auth/redeem-key', { key: v.toUpperCase() });
       wraithToast('Key redeemed!');
       input.value = '';
       populateLicense(await api('GET', '/subscriptions'));
@@ -310,6 +311,43 @@ function initDashboard() {
   }
   document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); logout(); });
   document.getElementById('logout-top').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+  // ── Profile picture edit ──────────────────────────────────────────────────
+  const pfpPopup  = document.getElementById('pfp-popup');
+  const pfpInput  = document.getElementById('pfp-url-input');
+  const pfpImg    = document.getElementById('dash-pfp');
+
+  function openPfpPopup() {
+    pfpInput.value = pfpImg.src !== location.href ? pfpImg.src : '';
+    pfpPopup.style.display = 'block';
+    pfpInput.focus();
+  }
+  function closePfpPopup() { pfpPopup.style.display = 'none'; }
+
+  document.getElementById('dash-pfp').addEventListener('click', openPfpPopup);
+  document.getElementById('pfp-edit-btn').addEventListener('click', openPfpPopup);
+  document.getElementById('pfp-cancel-btn').addEventListener('click', closePfpPopup);
+
+  document.getElementById('pfp-save-btn').addEventListener('click', async () => {
+    const url = pfpInput.value.trim();
+    if (!url) { wraithToast('Enter an image URL'); return; }
+    const btn = document.getElementById('pfp-save-btn');
+    setLoading(btn, true);
+    try {
+      await api('PUT', '/profile', { profile_picture: url });
+      pfpImg.src = url;
+      closePfpPopup();
+      wraithToast('Profile picture updated');
+    } catch (err) {
+      wraithToast(err.message || 'Could not update picture');
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('pfp-wrap')?.contains(e.target)) closePfpPopup();
+  });
 
   loadDashboard();
 }

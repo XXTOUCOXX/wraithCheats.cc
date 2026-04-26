@@ -27,7 +27,18 @@
 
   <header class="dash-hero">
     <div style="display:flex;align-items:center;gap:18px">
-      <img id="dash-pfp" src="" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:none;border:2px solid var(--blood)">
+      <div id="pfp-wrap" style="position:relative;display:none;flex-shrink:0">
+        <img id="dash-pfp" src="" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--blood);cursor:pointer;display:block" title="Change picture">
+        <button id="pfp-edit-btn" style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--blood);border:2px solid #0a0a0a;color:#fff;font-size:10px;cursor:pointer;line-height:1;padding:0">✎</button>
+        <div id="pfp-popup" style="display:none;position:absolute;top:68px;left:0;background:#111;border:1px solid var(--blood);border-radius:6px;padding:12px;z-index:100;width:260px">
+          <div style="font-size:11px;color:var(--bone-dim);margin-bottom:6px">Paste an image URL</div>
+          <input id="pfp-url-input" type="url" placeholder="https://..." style="width:100%;box-sizing:border-box;background:#0a0a0a;border:1px solid #333;color:#fff;padding:6px 8px;border-radius:4px;font-size:12px;font-family:inherit">
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="pfp-save-btn" style="flex:1;background:var(--blood);color:#fff;border:none;border-radius:4px;padding:6px;cursor:pointer;font-size:12px">Save</button>
+            <button id="pfp-cancel-btn" style="flex:1;background:#222;color:#aaa;border:1px solid #333;border-radius:4px;padding:6px;cursor:pointer;font-size:12px">Cancel</button>
+          </div>
+        </div>
+      </div>
       <div>
         <div class="dash-hello">[ WELCOME BACK, RIDER ]</div>
         <h1 class="dash-name">—</h1>
