@@ -3,6 +3,7 @@
 const API_BASE  = 'https://proudlyauthentication.com';
 const PORTAL_KEY = 'pk_gri2butNfQ28AWQqNTD5xLtQKwer2MNv';
 const TOKEN_KEY  = 'portalSessionToken';
+const CUSTOMER_KEY = 'portalCustomer';
 
 function getApiUrl(endpoint) {
   return `${API_BASE}/api/portal/v1/${PORTAL_KEY}${endpoint}`;
@@ -30,6 +31,15 @@ function setLoading(btn, loading) {
   btn.disabled = loading;
   btn._orig = btn._orig || btn.textContent;
   btn.textContent = loading ? '...' : btn._orig;
+}
+
+function getCachedCustomer() {
+  try {
+    return JSON.parse(localStorage.getItem(CUSTOMER_KEY) || 'null');
+  } catch {
+    localStorage.removeItem(CUSTOMER_KEY);
+    return null;
+  }
 }
 
 function makeGoStep() {
@@ -62,6 +72,7 @@ function initLogin() {
       const token = data.session?.token;
       if (!token) { wraithToast('Login error: no token in response'); setLoading(btn, false); return; }
       localStorage.setItem(TOKEN_KEY, token);
+      if (data.customer) localStorage.setItem(CUSTOMER_KEY, JSON.stringify(data.customer));
       wraithToast('Signing in...');
       setTimeout(() => { window.location.href = '/dashboard'; }, 600);
     } catch (err) {
@@ -205,15 +216,44 @@ function initDashboard() {
     return;
   }
 
+  const TIER_MAP = { '10': 'Elite', '11': 'Platinum' };
+  const TIER_PRIORITY = ['11', '10'];
+
+  function getSubscriptionId(sub) {
+    if (sub == null) return '';
+    if (typeof sub === 'string' || typeof sub === 'number') return String(sub);
+    return String(sub.id || sub.subscription_id || sub.subscriptionId || sub.product_id || sub.productId || '');
+  }
+
+  function getTierFromSubscriptions(subs) {
+    const list = Array.isArray(subs) ? subs : [subs];
+    const ids = list.map(getSubscriptionId);
+    const priorityId = TIER_PRIORITY.find(id => ids.includes(id));
+    if (priorityId) return TIER_MAP[priorityId];
+    const tiered = list.find(sub => sub && typeof sub === 'object' && sub.tier);
+    return tiered?.tier || '';
+  }
+
+  function setTier(tier) {
+    const tierEl = document.querySelector('.license-info dd');
+    if (tierEl && tier) tierEl.textContent = tier;
+  }
 
   async function loadDashboard() {
     let session;
+    const cachedCustomer = getCachedCustomer();
+    if (cachedCustomer) setTier(getTierFromSubscriptions(cachedCustomer.subscriptions));
+
     try {
       session = await api('GET', '/auth/session');
       populateUser(session);
+      const user = session.customer || session.user || session;
+      if (user) localStorage.setItem(CUSTOMER_KEY, JSON.stringify(user));
+      setTier(getTierFromSubscriptions(user.subscriptions));
     } catch (err) {
       if (err._status === 401 || err._status === 403) {
         localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(CUSTOMER_KEY);
         window.location.href = '/login';
       }
       return;
@@ -253,7 +293,10 @@ function initDashboard() {
   }
 
   function populateLicense(subs) {
-    const sub = Array.isArray(subs) ? subs[0] : subs;
+    const tier = getTierFromSubscriptions(subs);
+    setTier(tier);
+
+    const sub = Array.isArray(subs) ? subs.find(item => item && typeof item === 'object') : subs;
     if (!sub) return;
 
     const statusEl = document.querySelector('.license-status__text');
@@ -264,10 +307,7 @@ function initDashboard() {
       }`;
     }
 
-    const TIER_MAP = { '10': 'Elite', '11': 'Platinum' };
     const dds = document.querySelectorAll('.license-info dd');
-    const tier = TIER_MAP[String(sub.id)] || sub.tier;
-    if (dds[0] && tier) dds[0].textContent = tier;
     const activatedAt = sub.activatedAt || sub.activated_at;
     if (dds[1] && activatedAt) {
       dds[1].textContent = new Date(activatedAt).toLocaleString('en-US', {
@@ -308,6 +348,7 @@ function initDashboard() {
   function logout() {
     api('POST', '/auth/logout').catch(() => {});
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(CUSTOMER_KEY);
     wraithToast('Signing out...');
     setTimeout(() => { window.location.href = '/login'; }, 600);
   }
