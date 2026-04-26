@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wraith — Logo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="mobile.css">
+<style>
+  body.logo-page { display: block; padding: 100px 0 0; min-height: 100vh; }
+  .logo-shell { max-width: 1200px; margin: 0 auto; padding: 60px 48px 120px; }
+  .logo-head { text-align: center; margin-bottom: 64px; }
+  .logo-head h1 {
+    font-family: 'Rye', serif;
+    font-size: clamp(56px, 9vw, 130px);
+    color: var(--bone);
+    line-height: 0.95;
+    margin: 18px 0;
+  }
+  .logo-head h1 em { color: var(--blood); font-style: normal; text-shadow: 0 0 30px rgba(193,39,45,0.5); }
+  .logo-head p { color: var(--bone-dim); max-width: 560px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
+
+  .logo-grid {
+    display: grid;
+    gap: 32px;
+    margin-bottom: 56px;
+  }
+  .logo-card {
+    background: linear-gradient(180deg, var(--char) 0%, var(--ember) 100%);
+    border: 1px solid rgba(232,220,196,0.08);
+    padding: 32px;
+    position: relative;
+  }
+  .logo-card::before, .logo-card::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border: 1px solid var(--blood);
+  }
+  .logo-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .logo-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .logo-card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(232,220,196,0.08);
+  }
+  .logo-card__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--blood);
+    text-transform: uppercase;
+  }
+  .logo-card__dim {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--dust);
+    letter-spacing: 0.15em;
+  }
+  .logo-card__art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    padding: 24px;
+    overflow: hidden;
+  }
+  .logo-card--dark .logo-card__art {
+    background: #050302;
+  }
+  .logo-card--bone .logo-card__art {
+    background: #ebe0c8;
+  }
+  .logo-card--bone svg text { fill: #1a1310 !important; }
+
+  .logo-card img, .logo-card object {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  .logo-card--icon .logo-card__art img {
+    width: 200px; height: 200px;
+  }
+
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 800px) { .row-2 { grid-template-columns: 1fr; } }
+
+  .download-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .download-row a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bone);
+    padding: 10px 16px;
+    border: 1px solid rgba(232,220,196,0.15);
+    transition: all 0.2s;
+  }
+  .download-row a:hover {
+    background: var(--blood);
+    border-color: var(--blood);
+  }
+
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 24px;
+  }
+  @media (max-width: 600px) { .palette { grid-template-columns: repeat(2, 1fr); } }
+  .swatch {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+  }
+  .swatch span { display: block; opacity: 0.7; font-size: 9px; }
+  .sw1 { background: #c1272d; color: #ebe0c8; }
+  .sw2 { background: #7a1418; color: #ebe0c8; }
+  .sw3 { background: #ebe0c8; color: #1a1310; }
+  .sw4 { background: #1a1310; color: #ebe0c8; }
+  .sw5 { background: #050302; color: #ebe0c8; }
+</style>
+</head>
+<body class="logo-page">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="Wraith Site.html" class="back">← Back to Site</a>
+</nav>
+
+<div class="logo-shell">
+
+  <header class="logo-head">
+    <div class="auth-card__eyebrow">[ BRAND IDENTITY ]</div>
+    <h1>The <em>mark</em>.</h1>
+    <p>Skull-crest crest with crossed revolvers, a distressed Rye wordmark, and two bullet holes through the type. Built to match the site's blood + bone palette.</p>
+  </header>
+
+  <!-- Full lockup on dark -->
+  <div class="logo-grid">
+    <div class="logo-card logo-card--dark">
+      <div class="logo-card__head">
+        <span class="logo-card__name">[ FULL LOCKUP — DARK ]</span>
+        <span class="logo-card__dim">800 × 400 · SVG</span>
+      </div>
+      <div class="logo-card__art">
+        <img src="assets/wraith-logo.svg" alt="Wraith logo full lockup" width="780">
+      </div>
+      <div class="download-row">
+        <a href="assets/wraith-logo.svg" download>↓ Download SVG</a>
+        <a href="assets/wraith-logo.svg" target="_blank">↗ Open</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Variants -->
+  <div class="logo-grid row-2">
+    <div class="logo-card logo-card--icon logo-card--dark">
+      <div class="logo-card__head">
+        <span class="logo-card__name">[ ICON / AVATAR ]</span>
+        <span class="logo-card__dim">512 × 512 · SVG</span>
+      </div>
+      <div class="logo-card__art">
+        <img src="assets/wraith-icon.svg" alt="Wraith icon">
+      </div>
+    </div>
+    <div class="logo-card">
+      <div class="logo-card__head">
+        <span class="logo-card__name">[ WORDMARK ONLY ]</span>
+        <span class="logo-card__dim">800 × 200 · SVG</span>
+      </div>
+      <div class="logo-card__art">
+        <img src="assets/wraith-wordmark.svg" alt="Wraith wordmark">
+      </div>
+    </div>
+  </div>
+
+  <!-- Palette -->
+  <div class="logo-card" style="margin-top: 32px">
+    <div class="logo-card__head">
+      <span class="logo-card__name">[ PALETTE ]</span>
+      <span class="logo-card__dim">5 STOPS</span>
+    </div>
+    <div class="palette">
+      <div class="swatch sw1">BLOOD<span>#C1272D</span></div>
+      <div class="swatch sw2">BLOOD DEEP<span>#7A1418</span></div>
+      <div class="swatch sw3">BONE<span>#EBE0C8</span></div>
+      <div class="swatch sw4">CHAR<span>#1A1310</span></div>
+      <div class="swatch sw5">INK<span>#050302</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="auth.js"></script>
+</body>
+</html>

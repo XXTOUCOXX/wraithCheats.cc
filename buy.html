@@ -36,6 +36,86 @@
     grid-template-columns: 1fr;
     max-width: 520px;
   }
+  .plans--two {
+    grid-template-columns: 1fr 1fr;
+    max-width: 920px;
+    align-items: start;
+  }
+  @media (max-width: 800px) { .plans--two { grid-template-columns: 1fr; } }
+
+  .plan__group { margin-bottom: 22px; }
+  .plan__group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blood);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(193,39,45,0.2);
+  }
+  .plan__group--exclusive .plan__group-label {
+    color: var(--bone);
+    border-bottom-color: rgba(232,220,196,0.18);
+  }
+  .plan__group--exclusive .plan__group-label::after {
+    content: ' · PLATINUM';
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .plan__group--locked .plan__group-label {
+    color: var(--rust, #6b3a3a);
+    border-bottom-color: rgba(232,220,196,0.06);
+  }
+  .plan__group ul { margin-bottom: 0 !important; }
+
+  /* tier accents */
+  .plan--elite {
+    background: linear-gradient(180deg, #1c1612 0%, #2a1f15 100%);
+  }
+  .plan--elite:hover {
+    border-color: #d4a040;
+    box-shadow: 0 30px 60px -20px rgba(212,160,64,0.45);
+  }
+  .plan--elite .plan__name,
+  .plan--elite .plan__currency,
+  .plan--elite .plan__amount,
+  .plan--elite .plan__list li::before { color: #d4a040; }
+  .plan--elite .plan__amount { text-shadow: 0 0 24px rgba(212,160,64,0.5); }
+  .plan--elite::before { background: #d4a040; color: #1c1612; }
+  .plan--elite.plan--featured { border-color: #d4a040; box-shadow: 0 30px 80px -20px rgba(212,160,64,0.5); }
+  .plan--elite .plan__cta:hover,
+  .plan--elite.plan--featured .plan__cta {
+    background: #d4a040;
+    border-color: #d4a040;
+    color: #1c1612;
+    box-shadow: 0 8px 32px rgba(212,160,64,0.5);
+  }
+  .plan--elite.plan--featured .plan__cta:hover {
+    background: #ecc065;
+    border-color: #ecc065;
+    box-shadow: 0 8px 40px rgba(236,192,101,0.7);
+  }
+
+  .plan--platinum {
+    background: linear-gradient(180deg, #14181c 0%, #1d242c 100%);
+  }
+  .plan--platinum:hover {
+    border-color: #b8d4e0;
+    box-shadow: 0 30px 60px -20px rgba(184,212,224,0.4);
+  }
+  .plan--platinum .plan__name,
+  .plan--platinum .plan__currency,
+  .plan--platinum .plan__amount,
+  .plan--platinum .plan__list li::before { color: #b8d4e0; }
+  .plan--platinum .plan__amount { text-shadow: 0 0 24px rgba(184,212,224,0.5); }
+  .plan--platinum::before { background: #b8d4e0; color: #14181c; }
+  .plan--platinum .plan__cta:hover {
+    background: #b8d4e0;
+    border-color: #b8d4e0;
+    color: #14181c;
+    box-shadow: 0 8px 32px rgba(184,212,224,0.5);
+  }
 
   .plan {
     background: linear-gradient(180deg, var(--char) 0%, var(--ember) 100%);
@@ -291,8 +371,8 @@
 
   <header class="buy-head">
     <div class="auth-card__eyebrow">[ LICENSE STORE ]</div>
-    <h1>Buy <em>Wraith</em>.</h1>
-    <p>One-time purchase. Per-user license key. Lifetime updates included. The wraith arrives within 60 seconds of payment.</p>
+    <h1>Choose your <em>tier</em>.</h1>
+    <p>Two license tiers. One-time purchase. Per-user license key. Lifetime updates included. The wraith arrives within 60 seconds of payment.</p>
   </header>
 
   <aside class="notice">
@@ -305,34 +385,115 @@
     </p>
     <ol class="notice__steps">
       <li><b>1</b><span><strong>Get Scooby Menu</strong> from <a href="https://scoobymenu.xyz/" target="_blank" rel="noopener" class="notice__link">scoobymenu.xyz</a></span></li>
-      <li><b>2</b><span><strong>Buy Wraith</strong> below — receive your license key instantly</span></li>
+      <li><b>2</b><span><strong>Pick a tier</strong> below — receive your license key instantly</span></li>
       <li><b>3</b><span><strong>Redeem</strong> the key in your account dashboard</span></li>
       <li><b>4</b><span><strong>Load Wraith</strong> directly from inside Scooby Menu</span></li>
     </ol>
   </aside>
 
-  <div class="plans plans--single">
+  <div class="plans plans--two">
 
-    <div class="plan plan--featured">
-      <div class="plan__name">[ LIFETIME LICENSE ]</div>
-      <h2 class="plan__title">Wraith</h2>
+    <div class="plan">
+      <div class="plan__name">[ ELITE ]</div>
+      <h2 class="plan__title">Elite</h2>
       <div class="plan__price">
         <span class="plan__currency">$</span>
-        <span class="plan__amount">49.99</span>
+        <span class="plan__amount">20</span>
       </div>
       <div class="plan__per">ONE-TIME · LIFETIME ACCESS</div>
-      <p class="plan__desc">Pay once. Ride forever. Per-user license key with lifetime updates and full feature access.</p>
-      <ul class="plan__list">
-        <li>All 10 menu categories</li>
-        <li>Full Config Browser (~6,000 entries)</li>
-        <li><strong style="color:var(--bone)">Lifetime updates</strong></li>
-        <li>Priority Discord support</li>
-        <li>Early access to beta builds</li>
-        <li>Module API access</li>
-        <li>1 license key transfer per year</li>
-        <li>Per-user activation</li>
-      </ul>
-      <a href="#checkout" class="plan__cta" data-plan="wraith">Buy Wraith →</a>
+      <p class="plan__desc">All the essentials. Solo riding, world control, and the full Model Library — enough to dominate without going nuclear.</p>
+
+      <div class="plan__group">
+        <div class="plan__group-label">SELF</div>
+        <ul class="plan__list">
+          <li>God Mode · Heal · No Ragdoll</li>
+          <li>Super Speed · Super Jump · Infinite Stamina</li>
+          <li>No Wanted Level</li>
+        </ul>
+      </div>
+      <div class="plan__group">
+        <div class="plan__group-label">MOVEMENT &amp; WORLD</div>
+        <ul class="plan__list">
+          <li>Teleport to Waypoint · Noclip · Vehicle Fly</li>
+          <li>Time / Weather / Gravity / Wind</li>
+          <li>Full Model Library (peds, animals, vehicles)</li>
+        </ul>
+      </div>
+      <div class="plan__group">
+        <div class="plan__group-label">COMBAT &amp; ESP</div>
+        <ul class="plan__list">
+          <li>All Weapons · Max Ammo · Reload Speed</li>
+          <li>Damage multiplier up to 10×</li>
+          <li>Basic ESP: Name · Distance · Health</li>
+          <li>Custom crosshair · FOV · Night vision</li>
+        </ul>
+      </div>
+      <div class="plan__group plan__group--locked">
+        <div class="plan__group-label">NOT INCLUDED</div>
+        <ul class="plan__list">
+          <li class="muted">Player-targeting (crash / lag / silent kill)</li>
+          <li class="muted">Aimbot · Triggerbot · Explosive ammo</li>
+          <li class="muted">Box / Skeleton / Snap-line ESP</li>
+          <li class="muted">Server economy events</li>
+          <li class="muted">Advanced trolling suite</li>
+        </ul>
+      </div>
+
+      <a href="#checkout" class="plan__cta" data-plan="elite">Buy Elite →</a>
+    </div>
+
+    <div class="plan plan--featured">
+      <div class="plan__name">[ PLATINUM ]</div>
+      <h2 class="plan__title">Platinum</h2>
+      <div class="plan__price">
+        <span class="plan__currency">$</span>
+        <span class="plan__amount">30</span>
+      </div>
+      <div class="plan__per">ONE-TIME · RECOMMENDED</div>
+      <p class="plan__desc">The full arsenal. Everything in Elite plus the offensive toolkit — player targeting, advanced aim, full ESP, and the OP troll suite.</p>
+
+      <div class="plan__group">
+        <div class="plan__group-label">EVERYTHING IN ELITE</div>
+        <ul class="plan__list">
+          <li>All Self / Movement / World / basic combat features</li>
+        </ul>
+      </div>
+      <div class="plan__group plan__group--exclusive">
+        <div class="plan__group-label">PLAYER TARGETING</div>
+        <ul class="plan__list">
+          <li>Crash Player · Lag Player · Kick Player</li>
+          <li>Silent Kill (no-anim insta-kill)</li>
+          <li>Freeze Player · Force Ragdoll</li>
+          <li>Fake Admin / impersonation</li>
+        </ul>
+      </div>
+      <div class="plan__group plan__group--exclusive">
+        <div class="plan__group-label">COMBAT &amp; AIM</div>
+        <ul class="plan__list">
+          <li>1000× Damage multiplier</li>
+          <li>Aimbot (lock-on + auto-fire)</li>
+          <li>Triggerbot · Rapid Fire</li>
+          <li>Explosive Ammo · Fire Ammo</li>
+        </ul>
+      </div>
+      <div class="plan__group plan__group--exclusive">
+        <div class="plan__group-label">FULL ESP</div>
+        <ul class="plan__list">
+          <li>3D Box · 2D Box · Skeleton</li>
+          <li>Snap Lines · Chams</li>
+        </ul>
+      </div>
+      <div class="plan__group plan__group--exclusive">
+        <div class="plan__group-label">SERVER &amp; TROLL</div>
+        <ul class="plan__list">
+          <li>Give Gold / Cash · Server Rewards triggers</li>
+          <li>Item dupe · Job reward spoofing</li>
+          <li>Clone spam · Prop spam · Animal swarm</li>
+          <li>Teleport-to-player (offensive)</li>
+        </ul>
+      </div>
+
+      <a href="#checkout" class="plan__cta" data-plan="platinum">Buy Platinum →</a>
     </div>
 
   </div>

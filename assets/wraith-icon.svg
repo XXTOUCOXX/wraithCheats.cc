@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="iconBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a1310"></stop>
+      <stop offset="100%" stop-color="#050302"></stop>
+    </radialGradient>
+    <linearGradient id="iconBone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ebe0c8"></stop>
+      <stop offset="100%" stop-color="#9d8e6f"></stop>
+    </linearGradient>
+    <filter id="iconGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+    </filter>
+    <filter id="iconGrit">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="9"></feTurbulence>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.2 -0.4"></feColorMatrix>
+      <feComposite in2="SourceGraphic" operator="in"></feComposite>
+    </filter>
+  </defs>
+
+  
+  <rect width="512" height="512" fill="url(#iconBg)"></rect>
+
+  
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#3a1c1d" stroke-width="2"></circle>
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#7a1418" stroke-width="1" opacity="0.6"></circle>
+
+  
+  <g stroke="#c1272d" stroke-width="2">
+    <line x1="256" y1="20" x2="256" y2="36"></line>
+    <line x1="256" y1="476" x2="256" y2="492"></line>
+    <line x1="20" y1="256" x2="36" y2="256"></line>
+    <line x1="476" y1="256" x2="492" y2="256"></line>
+  </g>
+  <g stroke="#7a1418" stroke-width="1.5" opacity="0.7">
+    <line x1="89" y1="89" x2="100" y2="100"></line>
+    <line x1="423" y1="89" x2="412" y2="100"></line>
+    <line x1="89" y1="423" x2="100" y2="412"></line>
+    <line x1="423" y1="423" x2="412" y2="412"></line>
+  </g>
+
+  
+  <ellipse cx="256" cy="240" rx="120" ry="90" fill="#c1272d" opacity="0.25" filter="url(#iconGlow)"></ellipse>
+
+  
+  <g transform="translate(256, 270)" opacity="0.85">
+    <g transform="rotate(-35)">
+      <rect x="-110" y="-7" width="80" height="14" fill="#1a1310" stroke="#3a1c1d" stroke-width="1.5"></rect>
+      <circle cx="-30" cy="0" r="14" fill="#0a0707" stroke="#5a4f3a" stroke-width="1.5"></circle>
+      <circle cx="-30" cy="0" r="5" fill="#3a2c1c"></circle>
+      <path d="M -18,7 L -4,28 L -4,42 L -22,42 L -22,28 Z" fill="#2a1c10" stroke="#3a1c1d" stroke-width="1"></path>
+    </g>
+    <g transform="rotate(35)">
+      <rect x="30" y="-7" width="80" height="14" fill="#1a1310" stroke="#3a1c1d" stroke-width="1.5"></rect>
+      <circle cx="30" cy="0" r="14" fill="#0a0707" stroke="#5a4f3a" stroke-width="1.5"></circle>
+      <circle cx="30" cy="0" r="5" fill="#3a2c1c"></circle>
+      <path d="M 18,7 L 4,28 L 4,42 L 22,42 L 22,28 Z" fill="#2a1c10" stroke="#3a1c1d" stroke-width="1"></path>
+    </g>
+  </g>
+
+  
+  <g transform="translate(256, 240)">
+    <path d="M -120,-70 C -120,-140 -64,-170 0,-170 C 64,-170 120,-140 120,-70&#xA;             L 116,-28 C 116,-28 88,-42 70,-28 L 60,-4 L 32,-18 L 8,4 L -8,4 L -32,-18 L -60,-4 L -70,-28 C -88,-42 -116,-28 -116,-28 Z" fill="#0a0707" stroke="#c1272d" stroke-width="3"></path>
+
+    
+    <g fill="url(#iconBone)" stroke="#5a4f3a" stroke-width="1.5">
+      <path d="M -64,-72 C -64,-114 -36,-134 0,-134 C 36,-134 64,-114 64,-72&#xA;               L 64,-18 C 64,0 50,10 36,10 L 32,28 L 18,38 L 18,52 L -18,52 L -18,38 L -32,28 L -36,10 C -50,10 -64,0 -64,-18 Z"></path>
+    </g>
+
+    
+    <ellipse cx="-28" cy="-50" rx="16" ry="20" fill="#0a0303"></ellipse>
+    <ellipse cx="28" cy="-50" rx="16" ry="20" fill="#0a0303"></ellipse>
+
+    
+    <circle cx="-28" cy="-50" r="13" fill="#c1272d" opacity="0.5" filter="url(#iconGlow)"></circle>
+    <circle cx="28" cy="-50" r="13" fill="#c1272d" opacity="0.5" filter="url(#iconGlow)"></circle>
+    <circle cx="-28" cy="-50" r="7" fill="#e8413f">
+      
+    </circle>
+    <circle cx="28" cy="-50" r="7" fill="#e8413f">
+      
+    </circle>
+
+    
+    <path d="M 0,-32 L -7,-10 L -2,-2 L 2,-2 L 7,-10 Z" fill="#0a0303"></path>
+
+    
+    <path d="M -50,-28 L -36,-4 L -28,-8 Z" fill="#5a4f3a" opacity="0.4"></path>
+    <path d="M 50,-28 L 36,-4 L 28,-8 Z" fill="#5a4f3a" opacity="0.4"></path>
+
+    
+    <g fill="url(#iconBone)" stroke="#5a4f3a" stroke-width="1">
+      <rect x="-20" y="14" width="7" height="20"></rect>
+      <rect x="-12" y="14" width="7" height="22"></rect>
+      <rect x="-3" y="14" width="7" height="22"></rect>
+      <rect x="6" y="14" width="7" height="20"></rect>
+      <rect x="14" y="14" width="6" height="18"></rect>
+    </g>
+  </g>
+
+  
+  <g font-family="&#39;Rye&#39;, serif" fill="#c1272d" font-size="32" letter-spacing="2">
+    <text x="256" y="448" text-anchor="middle">WRAITH</text>
+  </g>
+
+  
+  <rect width="512" height="512" fill="#000" opacity="0.35" filter="url(#iconGrit)"></rect>
+</svg>

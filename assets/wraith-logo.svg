@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    
+    <radialGradient id="paper" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a1310"></stop>
+      <stop offset="60%" stop-color="#0d0907"></stop>
+      <stop offset="100%" stop-color="#050302"></stop>
+    </radialGradient>
+
+    
+    <linearGradient id="bloodType" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8413f"></stop>
+      <stop offset="60%" stop-color="#c1272d"></stop>
+      <stop offset="100%" stop-color="#7a1418"></stop>
+    </linearGradient>
+
+    
+    <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ebe0c8"></stop>
+      <stop offset="100%" stop-color="#9d8e6f"></stop>
+    </linearGradient>
+
+    
+    <filter id="grit" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"></feTurbulence>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.5"></feColorMatrix>
+      <feComposite in2="SourceGraphic" operator="in"></feComposite>
+    </filter>
+
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+    </filter>
+
+    
+    <filter id="bloodGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+    </filter>
+
+    
+    <filter id="engrave" x="-5%" y="-5%" width="110%" height="115%">
+      <feGaussianBlur stdDeviation="0.5"></feGaussianBlur>
+    </filter>
+  </defs>
+
+  
+  <rect width="800" height="400" fill="url(#paper)"></rect>
+
+  
+  <rect x="20" y="20" width="760" height="360" fill="none" stroke="#3a1c1d" stroke-width="1"></rect>
+  <rect x="26" y="26" width="748" height="348" fill="none" stroke="#1f0f10" stroke-width="1"></rect>
+
+  
+  <g stroke="#c1272d" stroke-width="2" fill="none">
+    <path d="M 36 36 L 36 64 M 36 36 L 64 36"></path>
+    <path d="M 764 36 L 764 64 M 764 36 L 736 36"></path>
+    <path d="M 36 364 L 36 336 M 36 364 L 64 364"></path>
+    <path d="M 764 364 L 764 336 M 764 364 L 736 364"></path>
+  </g>
+
+  
+  <g font-family="&#39;JetBrains Mono&#39;, monospace" fill="#8a7a5e" font-size="11" letter-spacing="6">
+    <text x="400" y="78" text-anchor="middle">[ REDM EXTENSION ]</text>
+  </g>
+
+  
+  <g stroke="#c1272d" stroke-opacity="0.4">
+    <line x1="120" y1="78" x2="240" y2="78" stroke-width="1"></line>
+    <line x1="560" y1="78" x2="680" y2="78" stroke-width="1"></line>
+    <circle cx="245" cy="78" r="1.5" fill="#c1272d"></circle>
+    <circle cx="555" cy="78" r="1.5" fill="#c1272d"></circle>
+  </g>
+
+  
+  <g transform="translate(400, 178)">
+    
+    <ellipse cx="0" cy="0" rx="56" ry="40" fill="#c1272d" opacity="0.18" filter="url(#bloodGlow)"></ellipse>
+
+    
+    <path d="M -52,-30 C -52,-58 -28,-72 0,-72 C 28,-72 52,-58 52,-30&#xA;             L 50,-12 C 50,-12 38,-18 30,-12 L 26,-2 L 14,-8 L 4,2 L -4,2 L -14,-8 L -26,-2 L -30,-12 C -38,-18 -50,-12 -50,-12 Z" fill="#0a0707" stroke="#c1272d" stroke-width="1.5"></path>
+
+    
+    <g fill="url(#bone)" stroke="#5a4f3a" stroke-width="0.8">
+      
+      <path d="M -28,-32 C -28,-50 -16,-58 0,-58 C 16,-58 28,-50 28,-32&#xA;               L 28,-8 C 28,0 22,4 16,4 L 14,12 L 8,16 L 8,22 L -8,22 L -8,16 L -14,12 L -16,4 C -22,4 -28,0 -28,-8 Z"></path>
+    </g>
+
+    
+    <ellipse cx="-12" cy="-22" rx="7" ry="9" fill="#0a0303"></ellipse>
+    <ellipse cx="12" cy="-22" rx="7" ry="9" fill="#0a0303"></ellipse>
+    <circle cx="-12" cy="-22" r="3" fill="#e8413f">
+      
+    </circle>
+    <circle cx="12" cy="-22" r="3" fill="#e8413f">
+      
+    </circle>
+    
+    <circle cx="-12" cy="-22" r="6" fill="#c1272d" opacity="0.35" filter="url(#bloodGlow)"></circle>
+    <circle cx="12" cy="-22" r="6" fill="#c1272d" opacity="0.35" filter="url(#bloodGlow)"></circle>
+
+    
+    <path d="M 0,-14 L -3,-4 L -1,-1 L 1,-1 L 3,-4 Z" fill="#0a0303"></path>
+
+    
+    <path d="M -22,-12 L -16,-2 L -12,-4 Z" fill="#5a4f3a" opacity="0.5"></path>
+    <path d="M 22,-12 L 16,-2 L 12,-4 Z" fill="#5a4f3a" opacity="0.5"></path>
+
+    
+    <g fill="url(#bone)" stroke="#5a4f3a" stroke-width="0.5">
+      <rect x="-9" y="6" width="3" height="8"></rect>
+      <rect x="-5" y="6" width="3" height="9"></rect>
+      <rect x="-1" y="6" width="3" height="9"></rect>
+      <rect x="3" y="6" width="3" height="8"></rect>
+      <rect x="7" y="6" width="2.5" height="7"></rect>
+    </g>
+
+    
+    <g stroke="#3a1c1d" stroke-width="1" fill="#1a1310" opacity="0.85" transform="translate(0,0)">
+      
+      <g transform="rotate(-35)">
+        <rect x="-46" y="-3" width="32" height="6" fill="#1a1310"></rect>
+        <circle cx="-14" cy="0" r="6" fill="#0a0707" stroke="#5a4f3a"></circle>
+        <circle cx="-14" cy="0" r="2" fill="#3a2c1c"></circle>
+        <path d="M -8,3 L -2,12 L -2,18 L -10,18 L -10,12 Z" fill="#2a1c10"></path>
+      </g>
+      
+      <g transform="rotate(35)">
+        <rect x="14" y="-3" width="32" height="6" fill="#1a1310"></rect>
+        <circle cx="14" cy="0" r="6" fill="#0a0707" stroke="#5a4f3a"></circle>
+        <circle cx="14" cy="0" r="2" fill="#3a2c1c"></circle>
+        <path d="M 8,3 L 2,12 L 2,18 L 10,18 L 10,12 Z" fill="#2a1c10"></path>
+      </g>
+    </g>
+  </g>
+
+  
+  <g font-family="&#39;Rye&#39;, &#39;Smokum&#39;, &#39;Rozha One&#39;, Georgia, serif" font-weight="400">
+    
+    <text x="402" y="298" text-anchor="middle" font-size="86" fill="#00d9ff" opacity="0.18" letter-spacing="8">WRAITH</text>
+    
+    <text x="398" y="298" text-anchor="middle" font-size="86" fill="#7a1418" opacity="0.6" letter-spacing="8">WRAITH</text>
+    
+    <text x="400" y="298" text-anchor="middle" font-size="86" fill="url(#bloodType)" letter-spacing="8" filter="url(#rough)">WRAITH</text>
+
+    
+    <g fill="#0a0303">
+      <circle cx="298" cy="276" r="3.5"></circle>
+      <circle cx="298" cy="276" r="2" fill="#1a0a0a"></circle>
+      <circle cx="488" cy="280" r="3"></circle>
+      <circle cx="488" cy="280" r="1.5" fill="#1a0a0a"></circle>
+    </g>
+    
+    <g stroke="#3a1c1d" stroke-width="0.6" fill="none" opacity="0.6">
+      <path d="M 295,273 L 290,268 M 301,273 L 306,268 M 295,279 L 290,284 M 301,279 L 306,284"></path>
+      <path d="M 485,277 L 481,273 M 491,277 L 495,273 M 485,283 L 481,287 M 491,283 L 495,287"></path>
+    </g>
+  </g>
+
+  
+  <g stroke="#c1272d" stroke-opacity="0.6">
+    <line x1="280" y1="320" x2="380" y2="320" stroke-width="1"></line>
+    <line x1="420" y1="320" x2="520" y2="320" stroke-width="1"></line>
+    <path d="M 395,316 L 400,322 L 405,316 L 400,310 Z" fill="#c1272d" stroke="none"></path>
+  </g>
+
+  
+  <text x="400" y="346" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, monospace" font-size="11" fill="#8a7a5e" letter-spacing="6">DEAD   SILENT   ·   DEAD   ACCURATE</text>
+
+  
+  <g font-family="&#39;JetBrains Mono&#39;, monospace" fill="#c1272d" font-size="9" letter-spacing="2" opacity="0.7">
+    <text x="48" y="356">v1.0.0</text>
+    <text x="752" y="356" text-anchor="end">EST 2026</text>
+  </g>
+
+  
+  <rect width="800" height="400" fill="#000" opacity="0.4" filter="url(#grit)" style="pointer-events:none"></rect>
+
+  
+  <g opacity="0.15">
+    <line x1="0" y1="200" x2="800" y2="200" stroke="#c1272d" stroke-width="0.5"></line>
+  </g>
+</svg>

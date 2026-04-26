@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <defs>
+    <linearGradient id="wmBlood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8413f"></stop>
+      <stop offset="60%" stop-color="#c1272d"></stop>
+      <stop offset="100%" stop-color="#7a1418"></stop>
+    </linearGradient>
+    <filter id="wmRough">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+    </filter>
+    <filter id="wmGrit">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="5"></feTurbulence>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.2 -0.45"></feColorMatrix>
+      <feComposite in2="SourceGraphic" operator="in"></feComposite>
+    </filter>
+  </defs>
+
+  <rect width="800" height="200" fill="#050302"></rect>
+
+  
+  <line x1="60" y1="48" x2="740" y2="48" stroke="#3a1c1d" stroke-width="1"></line>
+  <line x1="60" y1="152" x2="740" y2="152" stroke="#3a1c1d" stroke-width="1"></line>
+
+  
+  <text x="400" y="38" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, monospace" fill="#8a7a5e" font-size="11" letter-spacing="6">[ REDM EXTENSION ]</text>
+
+  
+  <g font-family="&#39;Rye&#39;, serif" font-weight="400">
+    <text x="402" y="118" text-anchor="middle" font-size="78" fill="#00d9ff" opacity="0.18" letter-spacing="8">WRAITH</text>
+    <text x="398" y="118" text-anchor="middle" font-size="78" fill="#7a1418" opacity="0.6" letter-spacing="8">WRAITH</text>
+    <text x="400" y="118" text-anchor="middle" font-size="78" fill="url(#wmBlood)" letter-spacing="8" filter="url(#wmRough)">WRAITH</text>
+
+    
+    <g fill="#0a0303">
+      <circle cx="298" cy="98" r="3.5"></circle>
+      <circle cx="488" cy="102" r="3"></circle>
+    </g>
+  </g>
+
+  
+  <text x="400" y="142" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, monospace" fill="#8a7a5e" font-size="10" letter-spacing="6">DEAD   SILENT   ·   DEAD   ACCURATE</text>
+
+  
+  <rect width="800" height="200" fill="#000" opacity="0.35" filter="url(#wmGrit)"></rect>
+</svg>
