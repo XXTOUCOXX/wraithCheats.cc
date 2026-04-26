@@ -255,9 +255,9 @@ function initDashboard() {
     if (!sub) return;
 
     const statusEl = document.querySelector('.license-status__text');
-    if (statusEl) {
+    if (statusEl && sub.status) {
       const active = sub.status === 'active';
-      statusEl.innerHTML = `<strong>${(sub.status || 'UNKNOWN').toUpperCase()}</strong> · ${
+      statusEl.innerHTML = `<strong>${sub.status.toUpperCase()}</strong> · ${
         active ? 'You own Wraith. The wraith rides with you.' : 'Your license is ' + sub.status + '.'
       }`;
     }
