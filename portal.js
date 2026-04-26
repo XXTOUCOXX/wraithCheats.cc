@@ -63,7 +63,7 @@ function initLogin() {
       if (!token) { wraithToast('Login error: no token in response'); setLoading(btn, false); return; }
       localStorage.setItem(TOKEN_KEY, token);
       wraithToast('Signing in...');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+      setTimeout(() => { window.location.href = '/dashboard'; }, 600);
     } catch (err) {
       wraithToast(err.message || 'Invalid credentials');
       setLoading(btn, false);
@@ -189,7 +189,7 @@ function initForgot() {
       });
       if (data.token) localStorage.setItem(TOKEN_KEY, data.token);
       wraithToast('Password updated. Signing in...');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+      setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
     } catch (err) {
       wraithToast(err.message || 'Reset failed');
       setLoading(resetBtn, false);
@@ -201,7 +201,7 @@ function initForgot() {
 
 function initDashboard() {
   if (!localStorage.getItem(TOKEN_KEY)) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -214,7 +214,7 @@ function initDashboard() {
     } catch (err) {
       if (err._status === 401 || err._status === 403) {
         localStorage.removeItem(TOKEN_KEY);
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       }
       return;
     }
@@ -309,7 +309,7 @@ function initDashboard() {
     api('POST', '/auth/logout').catch(() => {});
     localStorage.removeItem(TOKEN_KEY);
     wraithToast('Signing out...');
-    setTimeout(() => { window.location.href = 'login.html'; }, 600);
+    setTimeout(() => { window.location.href = '/login'; }, 600);
   }
   document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); logout(); });
   document.getElementById('logout-top').addEventListener('click', (e) => { e.preventDefault(); logout(); });
@@ -357,7 +357,7 @@ function initDashboard() {
 // ── Router ────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  const page = location.pathname.replace(/\.html$/, '').split('/').pop() || 'index';
+  const page = location.pathname.replace(/\/$/, '').split('/').pop() || 'index';
   if (page === 'login')     initLogin();
   if (page === 'register')  initRegister();
   if (page === 'forgot')    initForgot();
