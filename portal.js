@@ -22,7 +22,7 @@ async function api(method, endpoint, body) {
     body: body !== undefined ? JSON.stringify(body) : undefined
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw data;
+  if (!res.ok) throw Object.assign({}, data, { _status: res.status });
   return data;
 }
 
@@ -212,8 +212,10 @@ function initDashboard() {
       session = await api('GET', '/auth/session');
       populateUser(session);
     } catch (err) {
-      localStorage.removeItem(TOKEN_KEY);
-      window.location.href = 'login.html';
+      if (err._status === 401 || err._status === 403) {
+        localStorage.removeItem(TOKEN_KEY);
+        window.location.href = 'login.html';
+      }
       return;
     }
 
