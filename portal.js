@@ -415,11 +415,6 @@ function initDashboard() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const page = location.pathname.replace(/\/$/, '').split('/').pop() || 'index';
-  const loggedIn = !!localStorage.getItem(TOKEN_KEY);
-  if ((page === 'login' || page === 'register') && loggedIn) {
-    window.location.replace('/dashboard');
-    return;
-  }
   if (page === 'login')     initLogin();
   if (page === 'register')  initRegister();
   if (page === 'forgot')    initForgot();
