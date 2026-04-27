@@ -30,7 +30,7 @@
     <li><a href="/buy">Buy</a></li>
     <li><a href="/changelog">Changelog</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="/login">Sign In</a></li>
+    <li><a href="/login" id="nav-auth-link">Sign In</a></li>
   </ul>
   <a href="/buy" class="nav__cta">Buy Wraith</a>
 </nav>
@@ -505,6 +505,11 @@
 document.querySelectorAll('.nav__links a').forEach(a => {
   a.addEventListener('click', () => document.body.classList.remove('nav-open'));
 });
+// Swap Sign In → Dashboard if already logged in
+if (localStorage.getItem('portalSessionToken')) {
+  const link = document.getElementById('nav-auth-link');
+  if (link) { link.href = '/dashboard'; link.textContent = 'Dashboard'; }
+}
 </script>
 </body>
 </html>
