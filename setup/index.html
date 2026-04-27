@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Setup — WRAITH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/auth.css">
+<link rel="stylesheet" href="/mobile.css">
+<style>
+  body.setup { display: block; padding: 100px 0 0; min-height: 100vh; }
+  .setup-shell { max-width: 1200px; margin: 0 auto; padding: 60px 48px 120px; }
+
+  /* HEAD */
+  .setup-head { text-align: center; margin-bottom: 80px; position: relative; }
+  .setup-head h1 {
+    font-family: 'Rye', serif;
+    font-size: clamp(60px, 9vw, 140px);
+    color: var(--bone);
+    line-height: 0.95;
+    margin: 18px 0;
+  }
+  .setup-head h1 em { color: var(--blood); font-style: normal; text-shadow: 0 0 30px rgba(193,39,45,0.5); }
+  .setup-head p { color: var(--bone-dim); max-width: 620px; margin: 0 auto; font-weight: 300; line-height: 1.7; font-size: 17px; }
+
+  /* EXECUTOR PICKER */
+  .executors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto 100px;
+  }
+  .exec {
+    position: relative;
+    padding: 28px 24px;
+    background: linear-gradient(180deg, var(--char) 0%, var(--ember) 100%);
+    border: 1px solid rgba(232,220,196,0.08);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+  }
+  .exec:hover:not(.exec--disabled) {
+    border-color: var(--blood);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -20px rgba(193,39,45,0.5);
+  }
+  .exec.exec--active {
+    border-color: var(--blood);
+    background: linear-gradient(180deg, rgba(193,39,45,0.08) 0%, var(--ember) 100%);
+    box-shadow: inset 0 0 0 1px var(--blood), 0 20px 40px -20px rgba(193,39,45,0.5);
+  }
+  .exec--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .exec__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .exec__name {
+    font-family: 'Rye', serif;
+    font-size: 24px;
+    color: var(--bone);
+  }
+  .exec__badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    padding: 4px 8px;
+    background: rgba(111, 207, 151, 0.12);
+    color: #6fcf97;
+    border: 1px solid rgba(111, 207, 151, 0.3);
+  }
+  .exec__badge--soon {
+    background: rgba(232,220,196,0.06);
+    color: var(--dust);
+    border-color: rgba(232,220,196,0.12);
+  }
+  .exec__desc {
+    font-size: 12px;
+    color: var(--bone-dim);
+    line-height: 1.6;
+  }
+  .exec__pulse {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #6fcf97;
+    box-shadow: 0 0 12px #6fcf97;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .exec--disabled .exec__pulse { display: none; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* STEPS RAIL */
+  .steps-section {
+    position: relative;
+    margin-top: 40px;
+  }
+  .steps-section__head {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+    margin-bottom: 56px;
+    align-items: end;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(193,39,45,0.2);
+  }
+  .steps-section__index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--blood);
+  }
+  .steps-section__index small {
+    display: block;
+    color: var(--dust);
+    margin-bottom: 6px;
+    letter-spacing: 0.4em;
+  }
+  .steps-section__title {
+    font-family: 'Rye', serif;
+    font-size: clamp(36px, 5vw, 72px);
+    color: var(--bone);
+    line-height: 1;
+  }
+  .steps-section__title em { color: var(--blood); font-style: normal; }
+
+  /* STEP — alternating layout */
+  .step {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding: 64px 0;
+    border-bottom: 1px solid rgba(232,220,196,0.06);
+    position: relative;
+  }
+  .step:last-of-type { border-bottom: none; }
+  .step:nth-child(even) .step__media { order: 2; }
+  .step:nth-child(even) .step__copy { order: 1; }
+
+  .step__copy { position: relative; }
+  .step__num {
+    font-family: 'Rye', serif;
+    font-size: 96px;
+    color: var(--blood);
+    line-height: 0.85;
+    text-shadow: 0 0 30px rgba(193,39,45,0.4);
+    margin-bottom: 18px;
+    display: block;
+    position: relative;
+  }
+  .step__num::before {
+    content: 'STEP';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--dust);
+    text-shadow: none;
+  }
+  .step__title {
+    font-family: 'Rye', serif;
+    font-size: 32px;
+    color: var(--bone);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .step__desc {
+    color: var(--bone-dim);
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 18px;
+  }
+  .step__desc strong {
+    color: var(--bone);
+    font-weight: 500;
+  }
+  .step__hints {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-left: 2px solid var(--blood);
+    background: rgba(193,39,45,0.06);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--bone-dim);
+    line-height: 1.7;
+  }
+  .step__hints b {
+    color: var(--blood);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+  .step__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    padding: 12px 22px;
+    background: var(--blood);
+    color: var(--bone);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border: 1px solid var(--blood);
+    transition: all 0.25s;
+  }
+  .step__action:hover {
+    background: transparent;
+    box-shadow: 0 8px 24px rgba(193,39,45,0.4);
+    transform: translateY(-2px);
+  }
+  .step__action--ghost {
+    background: transparent;
+    border-color: rgba(232,220,196,0.2);
+    color: var(--bone);
+  }
+  .step__action--ghost:hover {
+    border-color: var(--bone);
+    background: rgba(232,220,196,0.04);
+  }
+
+  /* MEDIA — placeholder image frame */
+  .step__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #060403;
+    border: 1px solid rgba(232,220,196,0.08);
+    overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .step__media::before, .step__media::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    border: 2px solid var(--blood);
+    z-index: 3;
+  }
+  .step__media::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .step__media::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 14px, rgba(193,39,45,0.04) 14px 15px),
+      radial-gradient(ellipse at center, #1a0e0c 0%, #060403 70%);
+  }
+  .placeholder__icon {
+    width: 48px; height: 48px;
+    border: 1.5px dashed rgba(193,39,45,0.5);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blood);
+    font-family: 'Rye', serif;
+    font-size: 22px;
+  }
+  .placeholder__label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--blood);
+    text-transform: uppercase;
+  }
+  .placeholder__hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--dust);
+    text-transform: uppercase;
+  }
+  .placeholder__crosshair {
+    position: absolute;
+    width: 28px; height: 28px;
+    border: 1px solid rgba(193,39,45,0.4);
+  }
+  .placeholder__crosshair--tl { top: 16px; left: 16px; border-right: none; border-bottom: none; }
+  .placeholder__crosshair--tr { top: 16px; right: 16px; border-left: none; border-bottom: none; }
+  .placeholder__crosshair--bl { bottom: 16px; left: 16px; border-right: none; border-top: none; }
+  .placeholder__crosshair--br { bottom: 16px; right: 16px; border-left: none; border-top: none; }
+  .placeholder__stamp {
+    position: absolute;
+    bottom: 14px; right: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: rgba(232,220,196,0.4);
+  }
+  .placeholder__num {
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: 'Rye', serif;
+    color: rgba(193,39,45,0.4);
+    font-size: 14px;
+  }
+  /* Scanline */
+  .placeholder::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(193,39,45,0.04) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  /* PROGRESS RAIL */
+  .step__rail {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(193,39,45,0.3) 20%, rgba(193,39,45,0.3) 80%, transparent);
+    transform: translateX(-50%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* SUPPORT CTA */
+  .support {
+    margin-top: 100px;
+    padding: 56px 48px;
+    background: linear-gradient(135deg, rgba(193,39,45,0.12) 0%, var(--ember) 60%);
+    border: 1px solid rgba(193,39,45,0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .support::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(193,39,45,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 50%, rgba(193,39,45,0.1) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .support__eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--blood);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .support h3 {
+    font-family: 'Rye', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--bone);
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .support h3 em { color: var(--blood); font-style: normal; }
+  .support p {
+    color: var(--bone-dim);
+    max-width: 540px;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+    font-weight: 300;
+    position: relative;
+  }
+  .support__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    background: #5865f2;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border: 1px solid #5865f2;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .support__btn:hover {
+    background: transparent;
+    color: #5865f2;
+    box-shadow: 0 12px 32px rgba(88,101,242,0.4);
+    transform: translateY(-2px);
+  }
+  .support__btn svg { width: 20px; height: 20px; }
+
+  /* MOBILE */
+  @media (max-width: 800px) {
+    .setup-shell { padding: 40px 20px 80px !important; }
+    .steps-section__head { grid-template-columns: 1fr !important; gap: 14px !important; }
+    .step {
+      grid-template-columns: 1fr !important;
+      gap: 28px !important;
+      padding: 40px 0 !important;
+    }
+    .step:nth-child(even) .step__media { order: 0; }
+    .step:nth-child(even) .step__copy { order: 0; }
+    .step__num { font-size: 64px !important; }
+    .step__title { font-size: 24px !important; }
+    .support { padding: 40px 24px !important; }
+  }
+</style>
+</head>
+<body class="setup">
+
+<div class="auth-bg"></div>
+<canvas id="auth-particles" class="auth-particles"></canvas>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<nav class="subnav">
+  <a href="Wraith Site.html" class="brand">WRAITH</a>
+  <a href="/" class="back">← Back to Site</a>
+</nav>
+
+<div class="setup-shell">
+
+  <header class="setup-head">
+    <div class="auth-card__eyebrow">[ INSTALLATION GUIDE ]</div>
+    <h1>Saddle <em>up</em>.</h1>
+    <p>Eight steps from key to ride. Pick your menu, follow the trail, the wraith answers when called.</p>
+  </header>
+
+  <!-- EXECUTOR PICKER -->
+  <div class="steps-section__head" style="margin-bottom: 32px;">
+    <div class="steps-section__index"><small>SECTION 01</small>Pick your menu</div>
+    <h2 class="steps-section__title">Choose your <em>menu</em>.</h2>
+  </div>
+  <p style="color: var(--bone-dim); max-width: 720px; margin: 0 0 32px; line-height: 1.7; font-weight: 300;">
+    Wraith currently rides exclusively on <strong style="color: var(--bone)">Scooby Menu</strong>. Other base menus are on the trail — we'll list them here as compatibility lands.
+  </p>
+
+  <div class="executors">
+    <button class="exec exec--active" data-exec="scooby">
+      <span class="exec__pulse"></span>
+      <div class="exec__head">
+        <div class="exec__name">Scooby Menu</div>
+        <div class="exec__badge">SUPPORTED</div>
+      </div>
+      <div class="exec__desc">The base menu Wraith was built for. Auto-loaded by your executor.</div>
+    </button>
+    <button class="exec exec--disabled">
+      <div class="exec__head">
+        <div class="exec__name">More soon</div>
+        <div class="exec__badge exec__badge--soon">ROADMAP</div>
+      </div>
+      <div class="exec__desc">Additional base menus are on the way. Watch the changelog.</div>
+    </button>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-section">
+    <div class="steps-section__head">
+      <div class="steps-section__index"><small>SECTION 02</small>The trail</div>
+      <h2 class="steps-section__title">Eight <em>steps</em>.</h2>
+    </div>
+
+    <div class="step__rail"></div>
+
+    <!-- STEP 1 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">01</span>
+        <h3 class="step__title">Buy your license key.</h3>
+        <p class="step__desc">Pick a tier on the buy page — <strong>Elite</strong> or <strong>Platinum</strong>. Pay once. Your license key is delivered instantly to the email you used at checkout.</p>
+        <div class="step__hints"><b>NOTE</b><br>Check your spam folder if the key doesn't arrive within 60 seconds.</div>
+        <a href="buy.html" class="step__action">Go to store →</a>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_01</div>
+          <div class="placeholder__icon">$</div>
+          <div class="placeholder__label">Buy Page Screenshot</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 2 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">02</span>
+        <h3 class="step__title">Register or sign in.</h3>
+        <p class="step__desc">If you already have a <strong>Scooby account</strong>, just sign in with it — no need to make a second one. New rider? Register a fresh account in under a minute.</p>
+        <div class="step__hints"><b>NOTE</b><br>Your Wraith license is bound to this account. Keep your credentials safe.</div>
+        <a href="login.html" class="step__action">Sign in</a>
+        <a href="register.html" class="step__action step__action--ghost">Register</a>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_02</div>
+          <div class="placeholder__icon">⌥</div>
+          <div class="placeholder__label">Login / Register Screen</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 3 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">03</span>
+        <h3 class="step__title">Redeem the key.</h3>
+        <p class="step__desc">Open your <strong>dashboard</strong> and paste the license key you received. Wraith will be tied to your account — no further activation needed.</p>
+        <div class="step__hints"><b>FORMAT</b><br>WRTH-XXXX-XXXX-XXXX-XXXX</div>
+        <a href="dashboard.html" class="step__action">Open dashboard →</a>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_03</div>
+          <div class="placeholder__icon">⚷</div>
+          <div class="placeholder__label">Redeem Key Dialog</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 4 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">04</span>
+        <h3 class="step__title">Load Scooby in-game.</h3>
+        <p class="step__desc">Launch RedM, join your server, and inject <strong>Scooby Menu</strong> with your executor. Wait for the Scooby UI to appear.</p>
+        <div class="step__hints"><b>NOTE</b><br>Your executor must already have Scooby auto-loading. If not, see Scooby's own setup docs first.</div>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_04</div>
+          <div class="placeholder__icon">▶</div>
+          <div class="placeholder__label">Scooby Menu In-Game</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 5 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">05</span>
+        <h3 class="step__title">Open the Lua tab.</h3>
+        <p class="step__desc">Inside the Scooby UI, navigate to the <strong>Lua</strong> tab. This is where every script and extension lives.</p>
+        <div class="step__hints"><b>HOTKEY</b><br>The Lua tab is usually one of the last tabs in the top row of Scooby's main menu.</div>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_05</div>
+          <div class="placeholder__icon">L</div>
+          <div class="placeholder__label">Scooby — Lua Tab</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 6 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">06</span>
+        <h3 class="step__title">Go to Premium Menus.</h3>
+        <p class="step__desc">Inside the Lua tab, find the <strong>Premium Menus</strong> subtab. Wraith and other licensed extensions live here.</p>
+        <div class="step__hints"><b>NOTE</b><br>If "Premium Menus" doesn't appear, your Scooby account isn't linked yet — go back to step 03 and confirm your license is redeemed.</div>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_06</div>
+          <div class="placeholder__icon">★</div>
+          <div class="placeholder__label">Premium Menus Subtab</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 7 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">07</span>
+        <h3 class="step__title">Find Wraith. Click View.</h3>
+        <p class="step__desc">Locate <strong>Wraith</strong> in the Premium Menus list and hit the <strong>View</strong> button next to it. This brings up the load panel.</p>
+        <div class="step__hints"><b>TIER</b><br>Whether you bought Elite or Platinum, the entry shows up the same — your license tier is checked at load time.</div>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_07</div>
+          <div class="placeholder__icon">⊙</div>
+          <div class="placeholder__label">Wraith Entry — View Button</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- STEP 8 -->
+    <article class="step">
+      <div class="step__copy">
+        <span class="step__num">08</span>
+        <h3 class="step__title">Press Load Script.</h3>
+        <p class="step__desc">Hit <strong>Load Script</strong>. The wraith arrives. Your menu unlocks and you're free to ride. Welcome to the frontier.</p>
+        <div class="step__hints"><b>FIRST RUN</b><br>Initial load takes ~2 seconds while the model library indexes. After that it's instant.</div>
+      </div>
+      <div class="step__media">
+        <div class="placeholder__crosshair placeholder__crosshair--tl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--tr"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--bl"></div>
+        <div class="placeholder__crosshair placeholder__crosshair--br"></div>
+        <div class="placeholder">
+          <div class="placeholder__num">SHOT_08</div>
+          <div class="placeholder__icon">✦</div>
+          <div class="placeholder__label">Wraith Loaded</div>
+          <div class="placeholder__hint">Drop a screenshot here</div>
+          <div class="placeholder__stamp">PLACEHOLDER · 16:10</div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- SUPPORT -->
+  <aside class="support">
+    <div class="support__eyebrow">[ STUCK ON THE TRAIL? ]</div>
+    <h3>Holler in the <em>Discord</em>.</h3>
+    <p>Live support, install help, and the only place we post early builds. The posse rides at all hours.</p>
+    <a href="https://discord.gg/your-invite-here" target="_blank" rel="noopener" class="support__btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33a.07.07 0 0 0-.03.03c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z"/></svg>
+      Join the Discord
+    </a>
+  </aside>
+
+</div>
+
+<script src="/auth.js"></script>
+<script>
+  // Executor picker — single supported choice today, but wires the click for future tiers
+  document.querySelectorAll('.exec:not(.exec--disabled)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.exec').forEach(b => b.classList.remove('exec--active'));
+      btn.classList.add('exec--active');
+    });
+  });
+
+  // Reveal steps as they enter view
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.style.opacity = '0';
+    s.style.transform = 'translateY(40px)';
+    s.style.transition = 'opacity 0.7s cubic-bezier(0.2,0.8,0.2,1) ' + (i * 0.05) + 's, transform 0.7s cubic-bezier(0.2,0.8,0.2,1) ' + (i * 0.05) + 's';
+    io.observe(s);
+  });
+</script>
+</body>
+</html>

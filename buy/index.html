@@ -398,7 +398,7 @@
       <h2 class="plan__title">Elite</h2>
       <div class="plan__price">
         <span class="plan__currency">$</span>
-        <span class="plan__amount">20</span>
+        <span class="plan__amount">30</span>
       </div>
       <div class="plan__per">ONE-TIME · LIFETIME ACCESS</div>
       <p class="plan__desc">All the essentials. Solo riding, world control, and the full Model Library — enough to dominate without going nuclear.</p>
@@ -447,7 +447,7 @@
       <h2 class="plan__title">Platinum</h2>
       <div class="plan__price">
         <span class="plan__currency">$</span>
-        <span class="plan__amount">30</span>
+        <span class="plan__amount">50</span>
       </div>
       <div class="plan__per">ONE-TIME · RECOMMENDED</div>
       <p class="plan__desc">The full arsenal. Everything in Elite plus the offensive toolkit — player targeting, advanced aim, full ESP, and the OP troll suite.</p>
@@ -508,15 +508,16 @@
 
 <script src="/auth.js"></script>
 <script>
+const CHECKOUT_URLS = {
+  elite:    'https://fusiondash.myshopify.com/products/wraith-elite',
+  platinum: 'https://fusiondash.myshopify.com/products/wraith-platinum-redm'
+};
 document.querySelectorAll('[data-plan]').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
     const plan = btn.dataset.plan;
     wraithToast('Redirecting to checkout · ' + plan.toUpperCase());
-    setTimeout(() => {
-      // Replace with your actual store URL
-      window.location.href = 'https://store.wraith.example/checkout?plan=' + plan;
-    }, 900);
+    setTimeout(() => { window.location.href = CHECKOUT_URLS[plan]; }, 900);
   });
 });
 </script>
