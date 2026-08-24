@@ -4,7 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Register — WRAITH</title>
-<script>if(localStorage.getItem('portalSessionToken'))location.replace('/dashboard');</script>
+<script>
+  if (localStorage.getItem('portalSessionToken')) {
+    location.replace('/dashboard');
+  } else {
+    location.replace('https://scoobymenu.cc/portal/#register');
+  }
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=https://scoobymenu.cc/portal/#register"></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rye&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -25,91 +32,27 @@
 </nav>
 
 <div class="auth-card">
-  <div class="auth-card__top">
+  <div class="auth-card__top auth-redirect">
     <a href="/" class="auth-card__brand">WRAITH</a>
     <div class="auth-card__eyebrow">[ NEW RIDER ]</div>
+    <div class="auth-redirect__spinner"></div>
+    <h1 class="auth-card__title">Taking you to Scooby</h1>
+    <p class="auth-card__sub">Wraith accounts are Scooby accounts. Registration happens on the Scooby portal.</p>
   </div>
 
-  <div class="steps">
-    <span class="steps__dot active" data-step="1">1</span>
-    <span class="steps__line"></span>
-    <span class="steps__dot" data-step="2">2</span>
-    <span class="steps__line"></span>
-    <span class="steps__dot" data-step="3">✓</span>
+  <div class="auth-note">
+    <div class="auth-note__title">[ Scooby account required ]</div>
+    <p>Already own a <strong>Scooby</strong> account? You don&rsquo;t need to register again &mdash; <a href="/login">sign in to Wraith with it &rarr;</a></p>
   </div>
 
-  <!-- STEP 1: Account info -->
-  <div class="step-pane active" data-pane="1">
-    <div class="auth-card__top">
-      <h1 class="auth-card__title">Create account</h1>
-      <p class="auth-card__sub">Pick a username, an email we can verify, and a strong password.</p>
-    </div>
+  <a href="https://scoobymenu.cc/portal/#register" class="btn btn--primary btn--full">Continue to Scooby registration →</a>
 
-    <form id="register-form" autocomplete="off">
-      <div class="field">
-        <label class="field__label" for="reg-username">Username</label>
-        <input class="field__input" type="text" id="reg-username" name="username" placeholder="gunslinger_42" required>
-      </div>
-      <div class="field">
-        <label class="field__label" for="reg-email">Email</label>
-        <input class="field__input" type="email" id="reg-email" name="email" placeholder="you@frontier.lan" required>
-      </div>
-      <div class="field">
-        <label class="field__label" for="reg-password">Password</label>
-        <input class="field__input" type="password" id="reg-password" name="password" placeholder="At least 8 characters" minlength="8" required>
-      </div>
-
-      <div style="height: 12px"></div>
-      <button type="submit" class="btn btn--primary btn--full">Send verification code →</button>
-    </form>
-
-    <div class="auth-divider">— OR —</div>
-    <div class="auth-alt">
-      Already have an account? <a href="/login">Sign in →</a>
-    </div>
-  </div>
-
-  <!-- STEP 2: Verify code -->
-  <div class="step-pane" data-pane="2">
-    <div class="auth-card__top">
-      <h1 class="auth-card__title">Verify email</h1>
-      <p class="auth-card__sub">We sent a 6-digit code to <strong id="email-target" style="color:var(--blood)">your inbox</strong>. Enter it below.</p>
-    </div>
-
-    <div class="codebox" id="reg-codebox">
-      <input type="text" inputmode="numeric" maxlength="1">
-      <input type="text" inputmode="numeric" maxlength="1">
-      <input type="text" inputmode="numeric" maxlength="1">
-      <input type="text" inputmode="numeric" maxlength="1">
-      <input type="text" inputmode="numeric" maxlength="1">
-      <input type="text" inputmode="numeric" maxlength="1">
-    </div>
-
-    <button type="button" class="btn btn--primary btn--full" id="verify-btn">Verify code →</button>
-
-    <div class="resend">
-      Didn't get it?
-      <button type="button" data-resend>Resend code</button>
-    </div>
-
-    <div style="margin-top: 24px; text-align: center">
-      <a href="#" class="field__link" id="back-to-1">← Edit details</a>
-    </div>
-  </div>
-
-  <!-- STEP 3: Done -->
-  <div class="step-pane" data-pane="3">
-    <div class="auth-card__top" style="text-align: center">
-      <div style="font-size: 64px; color: var(--blood); margin-bottom: 16px; text-shadow: 0 0 24px rgba(193,39,45,0.5)">✓</div>
-      <h1 class="auth-card__title">Welcome, rider.</h1>
-      <p class="auth-card__sub">Your account is verified. Sign in to access your dashboard and redeem your license key.</p>
-    </div>
-    <div style="height: 24px"></div>
-    <a href="/login" class="btn btn--primary btn--full">Sign in →</a>
+  <div class="auth-divider">— OR —</div>
+  <div class="auth-alt">
+    Already have an account? <a href="/login">Sign in →</a>
   </div>
 </div>
 
 <script src="/auth.js"></script>
-<script src="/portal.js"></script>
 </body>
 </html>
