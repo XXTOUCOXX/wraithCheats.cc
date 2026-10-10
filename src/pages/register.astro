@@ -21,9 +21,9 @@ import { SITE } from '../data/site';
   </header>
 
   <p class="auth-note">
-    Already own a <strong>Scooby</strong> account? You don't need to register again. <a href="/login">Sign in to Wraith with it →</a>
+    Already own a <strong>Scooby</strong> account? You don't need to register again. <a href={SITE.scoobyLogin}>Sign in with it →</a>
   </p>
 
   <a href={SITE.scoobyRegister} class="btn btn--primary btn--full">Continue to Scooby registration →</a>
-  <p class="auth-alt">Already have an account? <a href="/login">Sign in →</a></p>
+  <p class="auth-alt">Already have an account? <a href={SITE.scoobyLogin}>Sign in →</a></p>
 </AuthLayout>

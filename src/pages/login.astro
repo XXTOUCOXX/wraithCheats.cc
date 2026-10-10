@@ -3,38 +3,23 @@ import AuthLayout from '../layouts/AuthLayout.astro';
 import '../styles/auth.css';
 import { SITE } from '../data/site';
 ---
-<AuthLayout title="Sign in" description="Sign in to your Wraith dashboard with your Scooby account.">
+<AuthLayout title="Sign in" description="Wraith accounts are Scooby accounts. Sign in on the Scooby portal.">
+  <script is:inline define:vars={{ target: SITE.scoobyLogin }}>
+    try {
+      location.replace(localStorage.getItem('portalSessionToken') ? '/dashboard' : target);
+    } catch {
+      location.replace(target);
+    }
+  </script>
+  <noscript><meta http-equiv="refresh" content={`0; url=${SITE.scoobyLogin}`} /></noscript>
+
   <header class="auth-head">
+    <div class="spinner" aria-hidden="true"></div>
     <p class="eyebrow">Welcome back</p>
-    <h1 class="display">Sign <em>in</em>.</h1>
-    <p>Use your Scooby credentials to reach your dashboard and license.</p>
+    <h1 class="display">Taking you to <em>Scooby</em>.</h1>
+    <p>Wraith accounts are Scooby accounts. Sign in on the Scooby portal to manage your license.</p>
   </header>
 
-  <p class="auth-note">
-    Wraith runs on the <strong>Scooby</strong> account system. Already have a Scooby account? Sign in with it right here,
-    no separate Wraith account needed.
-  </p>
-
-  <form id="login-form" autocomplete="on">
-    <div class="field">
-      <label class="field__label" for="username">Username</label>
-      <input class="field__input" type="text" id="username" name="username" autocomplete="username" placeholder="gunslinger_42" required />
-    </div>
-    <div class="field">
-      <label class="field__label" for="password">Password</label>
-      <input class="field__input" type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••••" required />
-    </div>
-    <div class="field__row">
-      <label class="check"><input type="checkbox" name="remember" checked /> Remember me</label>
-      <a href="/forgot">Forgot password?</a>
-    </div>
-    <button type="submit" class="btn btn--primary btn--full">Sign in →</button>
-  </form>
-
+  <a href={SITE.scoobyLogin} class="btn btn--primary btn--full">Continue to Scooby sign in →</a>
   <p class="auth-alt">No Scooby account yet? <a href={SITE.scoobyRegister}>Create one →</a></p>
 </AuthLayout>
-
-<script>
-  import { initLogin } from '../scripts/portal';
-  initLogin();
-</script>

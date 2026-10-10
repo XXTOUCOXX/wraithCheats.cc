@@ -1,3 +1,5 @@
+import { SITE } from './site';
+
 export interface SetupStep {
   title: string;
   body: string;
@@ -20,8 +22,8 @@ export const SETUP_STEPS: SetupStep[] = [
     note: { label: 'Note', text: 'Your Wraith license is bound to this account. Keep your credentials safe.' },
     image: '/setup/scooby/2.jpg',
     actions: [
-      { href: '/login', label: 'Sign in' },
-      { href: '/register', label: 'Register', ghost: true },
+      { href: SITE.scoobyLogin, label: 'Sign in' },
+      { href: SITE.scoobyRegister, label: 'Register', ghost: true },
     ],
   },
   {

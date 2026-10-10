@@ -1,5 +1,5 @@
 ---
-import { NAV } from '../data/site';
+import { NAV, SITE } from '../data/site';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 <header class="nav" data-nav>
@@ -13,7 +13,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       {NAV.map((l) => (
         <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a>
       ))}
-      <a href="/login" class="nav__auth" data-auth-link>Sign in</a>
+      <a href={SITE.scoobyLogin} class="nav__auth" data-auth-link>Sign in</a>
       <a href="/buy" class="btn btn--primary nav__cta">Get Wraith</a>
     </nav>
 
