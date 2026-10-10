@@ -1,0 +1,33 @@
+:root {
+  /* night */
+  --ink: #06070b;
+  --night: #0b0d13;
+  --night-2: #10141d;
+  --night-3: #171d2a;
+  --line: rgba(232, 223, 207, 0.1);
+  --line-strong: rgba(232, 223, 207, 0.22);
+
+  /* bone */
+  --bone: #ece3d3;
+  --bone-dim: #b0a796;
+  --bone-mute: #7a7468;
+
+  /* fire & blood */
+  --blood: #b3262b;
+  --blood-hi: #d23a3f;
+  --blood-deep: #6e1518;
+  --ember: #e39a4c;
+  --moon: #9fb4d6;
+
+  --f-display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  --f-serif: 'Cormorant Garamond', Georgia, serif;
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --wrap: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --nav-h: 72px;
+  --radius: 4px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  color-scheme: dark;
+}

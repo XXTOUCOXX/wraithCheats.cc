@@ -1,0 +1,102 @@
+---
+import { SITE } from '../data/site';
+import { CURRENT_VERSION } from '../data/changelog';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__discord">
+      <div>
+        <p class="eyebrow">Support</p>
+        <h2 class="display h-sm">Holler in the <em>Discord</em>.</h2>
+        <p class="footer__muted">Tickets, install help and bug reports. The posse rides at all hours.</p>
+      </div>
+      <a href={SITE.discord} target="_blank" rel="noopener" class="btn btn--ghost">Join the Discord →</a>
+    </div>
+
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="/assets/wraith-logo.svg" alt="Wraith" width="198" height="56" class="footer__logo" />
+        <p>A premium Lua extension for RedM, built on Scooby Menu. License-key activated, per user.</p>
+      </div>
+      <nav aria-label="Product">
+        <h3>Product</h3>
+        <a href="/#chapters">Features</a>
+        <a href="/buy">Pricing</a>
+        <a href="/changelog">Changelog</a>
+        <a href="/logo">Brand</a>
+      </nav>
+      <nav aria-label="Account">
+        <h3>Account</h3>
+        <a href="/login">Sign in</a>
+        <a href="/register">Register</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+      <nav aria-label="Help">
+        <h3>Help</h3>
+        <a href="/setup">Install guide</a>
+        <a href={SITE.discord} target="_blank" rel="noopener">Discord</a>
+        <a href={SITE.scooby} target="_blank" rel="noopener">Scooby Menu</a>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {year} Wraith. All rights reserved.</span>
+      <span>Build v{CURRENT_VERSION} · RedM</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background: var(--ink);
+    border-top: 1px solid var(--line);
+    padding-block: clamp(56px, 8vw, 96px) 32px;
+  }
+  .footer__discord {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px 48px;
+    flex-wrap: wrap;
+    padding-bottom: clamp(40px, 6vw, 64px);
+    margin-bottom: clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--line);
+  }
+  .footer__discord .display { margin: 14px 0 10px; }
+  .footer__muted { margin: 0; color: var(--bone-dim); }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 40px;
+  }
+  .footer__logo { width: auto; height: 56px; }
+  .footer__brand p { color: var(--bone-mute); max-width: 36ch; font-size: 14px; margin: 18px 0 0; }
+  .footer nav { display: grid; gap: 10px; align-content: start; }
+  .footer h3 {
+    margin: 0 0 6px;
+    font: 600 11px/1 var(--f-body);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bone-mute);
+  }
+  .footer nav a { color: var(--bone-dim); text-decoration: none; font-size: 14px; }
+  .footer nav a:hover { color: var(--bone); }
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--bone-mute);
+    letter-spacing: 0.06em;
+  }
+  @media (max-width: 760px) {
+    .footer__grid { grid-template-columns: 1fr 1fr; }
+    .footer__brand { grid-column: 1 / -1; }
+  }
+</style>

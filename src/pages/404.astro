@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Scene from '../components/Scene.astro';
+---
+<BaseLayout title="Lost on the trail" footer={false} preloadArt="cta">
+  <Scene art="cta" focus="72% 55%" eager>
+    <p class="eyebrow">404</p>
+    <h1 class="display h-xl">Lost on<br />the <em>trail</em>.</h1>
+    <p class="serif tag">This page rode off without you.</p>
+    <div class="ctas">
+      <a href="/" class="btn btn--primary">Back to camp</a>
+      <a href="/setup" class="btn btn--ghost">Install guide</a>
+    </div>
+  </Scene>
+</BaseLayout>
+
+<style>
+  .eyebrow { margin: 0 0 18px; }
+  .tag { font-size: clamp(1.3rem, 2.4vw, 1.9rem); color: var(--bone); margin: 18px 0 30px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

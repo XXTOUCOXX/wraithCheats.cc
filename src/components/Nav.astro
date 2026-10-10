@@ -1,0 +1,146 @@
+---
+import { NAV } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="nav" data-nav>
+  <div class="nav__inner">
+    <a href="/" class="nav__brand" aria-label="Wraith home">
+      <img src="/assets/wraith-emblem-256.png" alt="" width="38" height="38" />
+      <span>WRAITH</span>
+    </a>
+
+    <nav class="nav__links" id="nav-links" aria-label="Main">
+      {NAV.map((l) => (
+        <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a href="/login" class="nav__auth" data-auth-link>Sign in</a>
+      <a href="/buy" class="btn btn--primary nav__cta">Get Wraith</a>
+    </nav>
+
+    <button class="nav__burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links" data-burger>
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]')!;
+
+  const onScroll = () => nav.classList.toggle('is-solid', window.scrollY > 40);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    document.body.classList.toggle('nav-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+  };
+  burger.addEventListener('click', () => setOpen(!document.body.classList.contains('nav-open')));
+  nav.querySelectorAll('.nav__links a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+
+  // Signed-in riders see Dashboard instead of Sign in.
+  try {
+    if (localStorage.getItem('portalSessionToken')) {
+      const a = document.querySelector<HTMLAnchorElement>('[data-auth-link]')!;
+      a.href = '/dashboard';
+      a.textContent = 'Dashboard';
+    }
+  } catch { /* storage blocked */ }
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 80;
+    height: var(--nav-h);
+    transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .nav.is-solid {
+    background: rgba(8, 10, 15, 0.82);
+    backdrop-filter: blur(12px);
+    border-bottom-color: var(--line);
+  }
+  .nav__inner {
+    height: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font: 400 1.7rem/1 var(--f-display);
+    letter-spacing: 0.22em;
+  }
+  .nav__brand span { padding-top: 3px; }
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.4vw, 32px);
+  }
+  .nav__links a:not(.btn) {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--bone-dim);
+    transition: color 0.2s;
+  }
+  .nav__links a:not(.btn):hover,
+  .nav__links a[aria-current='page'] { color: var(--bone); }
+  .nav__cta { min-height: 40px; padding: 9px 18px 7px; font-size: 1.05rem; }
+
+  .nav__burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: rgba(6, 7, 11, 0.5);
+    cursor: pointer;
+    position: relative;
+  }
+  .nav__burger span {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    height: 1.5px;
+    background: var(--bone);
+    transition: transform 0.3s var(--ease), top 0.3s var(--ease);
+  }
+  .nav__burger span:first-child { top: 17px; }
+  .nav__burger span:last-child { top: 25px; }
+
+  @media (max-width: 860px) {
+    .nav__burger { display: block; z-index: 2; }
+    .nav__links {
+      position: fixed;
+      inset: 0;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+      background: rgba(6, 7, 11, 0.97);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .nav__links a:not(.btn) {
+      font: 400 2.4rem/1 var(--f-display);
+      letter-spacing: 0.08em;
+      color: var(--bone);
+    }
+    .nav__cta { margin-top: 12px; min-height: 52px; padding: 14px 32px 12px; font-size: 1.3rem; }
+    :global(body.nav-open) .nav__links { opacity: 1; visibility: visible; }
+    :global(body.nav-open) .nav__burger span:first-child { top: 21px; transform: rotate(45deg); }
+    :global(body.nav-open) .nav__burger span:last-child { top: 21px; transform: rotate(-45deg); }
+    :global(body.nav-open) { overflow: hidden; }
+  }
+</style>

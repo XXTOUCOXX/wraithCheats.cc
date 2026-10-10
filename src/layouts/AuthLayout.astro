@@ -1,0 +1,96 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  quote?: string;
+}
+const { title, description, quote = 'The wraith rides with you.' } = Astro.props;
+---
+<BaseLayout title={title} description={description} footer={false}>
+  <div class="auth">
+    <aside class="auth__art" aria-hidden="true">
+      <picture>
+        <source media="(max-width: 860px)" srcset="/art/auth-640.webp" />
+        <img src="/art/auth-1100.webp" alt="" width="1100" height="1608" fetchpriority="high" />
+      </picture>
+      <p class="auth__quote serif">{quote}</p>
+    </aside>
+    <div class="auth__main">
+      <div class="auth__card">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .auth {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    min-height: 100svh;
+  }
+  .auth__art {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .auth__art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 60%;
+    animation: drift 40s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from { transform: scale(1.03); }
+    to { transform: scale(1.1) translate3d(1%, -1%, 0); }
+  }
+  .auth__art::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(0deg, rgba(6, 7, 11, 0.85) 0%, transparent 40%),
+      linear-gradient(270deg, var(--night) 0%, transparent 25%);
+  }
+  .auth__quote {
+    position: absolute;
+    left: clamp(24px, 4vw, 56px);
+    right: 24px;
+    bottom: clamp(32px, 5vw, 56px);
+    z-index: 1;
+    margin: 0;
+    font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+    color: var(--bone);
+  }
+  .auth__main {
+    display: grid;
+    place-items: center;
+    padding: calc(var(--nav-h) + 32px) var(--gutter) 56px;
+  }
+  .auth__card { width: 100%; max-width: 440px; }
+
+  @media (max-width: 860px) {
+    .auth { grid-template-columns: 1fr; }
+    .auth__art {
+      position: fixed;
+      inset: 0;
+      height: auto;
+      z-index: -1;
+    }
+    .auth__art::after { background: linear-gradient(0deg, var(--night) 25%, rgba(11, 13, 19, 0.7) 60%, rgba(11, 13, 19, 0.5) 100%); }
+    .auth__quote { display: none; }
+    .auth__main { place-items: end center; }
+    .auth__card {
+      padding: 28px 22px;
+      background: rgba(11, 13, 19, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+  }
+</style>

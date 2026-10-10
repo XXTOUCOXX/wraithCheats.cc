@@ -1,0 +1,157 @@
+---
+/**
+ * Full-bleed cinematic background. Art lives in /public/art as
+ * <name>-2560.webp, <name>-1280.webp and a portrait <name>-m.webp crop.
+ * Pass `video` (an MP4 path) to swap the still for a muted loop later.
+ */
+interface Props {
+  art: string;
+  alt?: string;
+  focus?: string;
+  video?: string;
+  /** 'left' darkens behind left-aligned copy, 'center' vignettes evenly, 'bottom' fades into the page */
+  shade?: 'left' | 'center' | 'bottom';
+  kenburns?: boolean;
+  parallax?: number;
+  eager?: boolean;
+  class?: string;
+  id?: string;
+  letterbox?: boolean;
+  /** 'full' fills the viewport, 'head' is a shorter page header */
+  size?: 'full' | 'head';
+}
+
+const {
+  art,
+  alt = '',
+  focus = 'center',
+  video,
+  shade = 'left',
+  kenburns = true,
+  parallax = 60,
+  eager = false,
+  class: cls,
+  id,
+  letterbox = false,
+  size = 'full',
+} = Astro.props;
+---
+<section
+  id={id}
+  class:list={['scene', `scene--${shade}`, `scene--${size}`, { 'scene--kb': kenburns, 'scene--letterbox': letterbox }, cls]}
+  style={`--focus:${focus}`}
+>
+  <div class="scene__media" data-parallax={parallax} aria-hidden={alt ? undefined : 'true'}>
+    {video ? (
+      <video autoplay muted loop playsinline preload="metadata" poster={`/art/${art}-1280.webp`}>
+        <source src={video} type="video/mp4" />
+      </video>
+    ) : (
+      <picture>
+        <source media="(max-width: 700px) and (orientation: portrait)" srcset={`/art/${art}-m.webp`} />
+        <img
+          src={`/art/${art}-1280.webp`}
+          srcset={`/art/${art}-1280.webp 1280w, /art/${art}-2560.webp 2560w`}
+          sizes="100vw"
+          alt={alt}
+          width="2560"
+          height="1445"
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
+          decoding="async"
+        />
+      </picture>
+    )}
+  </div>
+  <div class="scene__shade" aria-hidden="true"></div>
+  <div class="scene__content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .scene {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    background: var(--ink);
+  }
+  .scene--head { min-height: min(72svh, 760px); align-items: end; }
+  .scene__media {
+    position: absolute;
+    inset: -70px 0;
+    z-index: -2;
+    will-change: transform;
+  }
+  .scene__media :is(img, video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--focus);
+  }
+  .scene--kb .scene__media :is(img, video) {
+    animation: kenburns 38s ease-in-out infinite alternate;
+    transform-origin: var(--focus);
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.02); }
+    to { transform: scale(1.12) translate3d(-1%, -0.5%, 0); }
+  }
+
+  .scene__shade { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  .scene--left .scene__shade {
+    background:
+      linear-gradient(90deg, rgba(6, 7, 11, 0.9) 0%, rgba(6, 7, 11, 0.62) 34%, rgba(6, 7, 11, 0.08) 66%, transparent 100%),
+      linear-gradient(0deg, var(--night) 0%, transparent 22%),
+      linear-gradient(180deg, rgba(6, 7, 11, 0.55) 0%, transparent 22%);
+  }
+  .scene--center .scene__shade {
+    background:
+      radial-gradient(ellipse at 50% 55%, rgba(6, 7, 11, 0.35) 0%, rgba(6, 7, 11, 0.8) 75%),
+      linear-gradient(0deg, var(--night) 0%, transparent 25%);
+  }
+  .scene--bottom .scene__shade {
+    background:
+      linear-gradient(0deg, var(--night) 0%, rgba(11, 13, 19, 0.75) 35%, rgba(6, 7, 11, 0.25) 70%, rgba(6, 7, 11, 0.55) 100%);
+  }
+
+  .scene__content {
+    width: 100%;
+    max-width: var(--wrap);
+    margin-inline: auto;
+    padding: calc(var(--nav-h) + 48px) var(--gutter) 64px;
+  }
+
+  /* cinema letterbox bars that open on load */
+  .scene--letterbox::before,
+  .scene--letterbox::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 7vh;
+    background: #000;
+    z-index: 1;
+    animation: bars 1.6s var(--ease) 0.2s both;
+  }
+  .scene--letterbox::before { top: 0; transform-origin: top; }
+  .scene--letterbox::after { bottom: 0; transform-origin: bottom; }
+  @keyframes bars {
+    from { transform: scaleY(7); }
+    to { transform: scaleY(1); }
+  }
+
+  @media (max-width: 700px) {
+    .scene { align-items: end; }
+    .scene--left .scene__shade {
+      background:
+        linear-gradient(0deg, var(--night) 0%, rgba(6, 7, 11, 0.86) 38%, rgba(6, 7, 11, 0.25) 68%, rgba(6, 7, 11, 0.5) 100%);
+    }
+    .scene__content { padding-bottom: 48px; }
+    .scene--letterbox::before,
+    .scene--letterbox::after { height: 4vh; }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+import '../styles/auth.css';
+---
+<AuthLayout title="Reset password" description="Reset your Wraith account password." quote="Every trail leads back to camp.">
+  <div class="steps" aria-hidden="true">
+    <span class="steps__dot active">1</span>
+    <span class="steps__line"></span>
+    <span class="steps__dot">2</span>
+    <span class="steps__line"></span>
+    <span class="steps__dot">3</span>
+  </div>
+
+  <section class="step-pane active" data-pane="1">
+    <header class="auth-head">
+      <p class="eyebrow">Recovery</p>
+      <h1 class="display">Forgot <em>password</em>?</h1>
+      <p>Enter the email tied to your account. We'll send you a 6-digit reset code.</p>
+    </header>
+    <form id="forgot-form" autocomplete="on">
+      <div class="field">
+        <label class="field__label" for="forgot-email">Email</label>
+        <input class="field__input" type="email" id="forgot-email" name="email" autocomplete="email" placeholder="you@frontier.lan" required />
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">Send reset code →</button>
+    </form>
+    <p class="auth-alt">Remembered it? <a href="/login">Sign in →</a></p>
+  </section>
+
+  <section class="step-pane" data-pane="2">
+    <header class="auth-head">
+      <p class="eyebrow">Step 2 of 3</p>
+      <h1 class="display">Enter the <em>code</em>.</h1>
+      <p>We sent a 6-digit reset code to <strong id="forgot-email-target" style="color:var(--ember)">your inbox</strong>.</p>
+    </header>
+    <div class="codebox" id="forgot-codebox" role="group" aria-label="6-digit code">
+      {Array.from({ length: 6 }, (_, i) => (
+        <input type="text" inputmode="numeric" maxlength="1" autocomplete={i === 0 ? 'one-time-code' : 'off'} aria-label={`Digit ${i + 1}`} />
+      ))}
+    </div>
+    <button type="button" class="btn btn--primary btn--full" id="forgot-verify">Verify code →</button>
+    <p class="resend">Didn't get it? <button type="button" data-resend>Resend code</button></p>
+  </section>
+
+  <section class="step-pane" data-pane="3">
+    <header class="auth-head">
+      <p class="eyebrow">Step 3 of 3</p>
+      <h1 class="display">New <em>password</em>.</h1>
+      <p>Pick something strong. You'll be signed in automatically.</p>
+    </header>
+    <form id="reset-form" autocomplete="on">
+      <div class="field">
+        <label class="field__label" for="new-pw">New password</label>
+        <input class="field__input" type="password" id="new-pw" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required />
+      </div>
+      <div class="field">
+        <label class="field__label" for="confirm-pw">Confirm password</label>
+        <input class="field__input" type="password" id="confirm-pw" autocomplete="new-password" placeholder="Repeat it" minlength="8" required />
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">Reset &amp; sign in →</button>
+    </form>
+  </section>
+</AuthLayout>
+
+<script>
+  import { initForgot } from '../scripts/portal';
+  initForgot();
+</script>

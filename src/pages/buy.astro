@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Scene from '../components/Scene.astro';
+import TierCard from '../components/TierCard.astro';
+import { TIERS, COMPARE } from '../data/tiers';
+import { SITE } from '../data/site';
+---
+<BaseLayout
+  title="Pricing"
+  description="Wraith Elite $15 or Platinum $25. One-time payment, lifetime updates, key delivered instantly."
+  preloadArt="buy"
+>
+  <Scene art="buy" focus="55% 70%" size="head" eager>
+    <p class="eyebrow" data-reveal>License store</p>
+    <h1 class="display h-xl" data-reveal style="--d:.1s">Choose your <em>tier</em>.</h1>
+    <p class="lead" data-reveal style="--d:.2s">
+      Two tiers. One-time purchase, per-user key, lifetime updates. The wraith arrives within 60 seconds of payment.
+    </p>
+  </Scene>
+
+  <section class="wrap buy">
+    <aside class="notice" data-reveal>
+      <div>
+        <p class="eyebrow">Read before you buy</p>
+        <h2 class="display h-md">Scooby Menu is <em>required</em>.</h2>
+        <p>
+          Wraith is an extension that runs on top of Scooby Menu. You must own and have Scooby installed before
+          purchasing. Without it, Wraith cannot load.
+        </p>
+        <a href={SITE.scooby} target="_blank" rel="noopener" class="link-arrow">Get Scooby Menu at scoobymenu.xyz →</a>
+      </div>
+      <ol class="notice__steps">
+        <li><b>1</b><span><strong>Get Scooby Menu</strong> from scoobymenu.xyz</span></li>
+        <li><b>2</b><span><strong>Pick a tier</strong> below and receive your key instantly</span></li>
+        <li><b>3</b><span><strong>Redeem</strong> the key in your dashboard</span></li>
+        <li><b>4</b><span><strong>Load Wraith</strong> from inside Scooby Menu</span></li>
+      </ol>
+    </aside>
+
+    <div class="buy__tiers" id="tiers">
+      {TIERS.map((t) => <TierCard tier={t} variant="full" />)}
+    </div>
+
+    <div class="buy__trust" data-reveal>
+      <span>Instant key delivery</span>
+      <span>Stripe · PayPal · Crypto</span>
+      <span>Per-user activation</span>
+      <span>Lifetime updates</span>
+    </div>
+
+    <section class="compare" id="compare">
+      <header class="section-head">
+        <p class="eyebrow" data-reveal>Side by side</p>
+        <h2 class="display h-lg" data-reveal style="--d:.1s">Every feature, <em>compared</em>.</h2>
+      </header>
+      <div class="compare__scroll" data-reveal>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              {TIERS.map((t) => (
+                <th scope="col">{t.name}<small>${t.price}</small></th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {COMPARE.map(([label, elite, plat]) => (
+              <tr>
+                <th scope="row">{label}</th>
+                <td class:list={{ yes: elite }}>{elite ? '✓' : '—'}<span class="sr-only">{elite ? 'Included' : 'Not included'}</span></td>
+                <td class:list={{ yes: plat }}>{plat ? '✓' : '—'}<span class="sr-only">{plat ? 'Included' : 'Not included'}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</BaseLayout>
+
+<script>
+  import { toast } from '../scripts/auth-ui';
+  document.querySelectorAll<HTMLAnchorElement>('[data-checkout]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      toast(`Redirecting to checkout · ${a.dataset.checkout!.toUpperCase()}`);
+      setTimeout(() => (location.href = a.href), 700);
+    });
+  });
+</script>
+
+<style>
+  .buy { padding-block: 24px clamp(80px, 10vw, 140px); }
+
+  .notice {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px 56px;
+    align-items: center;
+    padding: clamp(28px, 4vw, 44px);
+    margin-bottom: 56px;
+    border: 1px solid rgba(227, 154, 76, 0.3);
+    border-left: 3px solid var(--ember);
+    border-radius: 8px;
+    background: linear-gradient(110deg, rgba(227, 154, 76, 0.08), rgba(16, 20, 29, 0.6) 60%);
+  }
+  .notice h2 { margin: 14px 0 12px; }
+  .notice p:not(.eyebrow) { color: var(--bone-dim); margin: 0 0 16px; max-width: 54ch; }
+  .notice__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .notice__steps li { display: flex; gap: 14px; align-items: baseline; color: var(--bone-dim); font-size: 15px; }
+  .notice__steps strong { color: var(--bone); font-weight: 600; }
+  .notice__steps b {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(227, 154, 76, 0.5);
+    border-radius: 50%;
+    font: 400 1rem/1 var(--f-display);
+    color: var(--ember);
+    padding-top: 2px;
+  }
+
+  .buy__tiers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+  .buy__trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 36px;
+    margin: 40px 0 clamp(80px, 10vw, 140px);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bone-mute);
+  }
+  .buy__trust span::before { content: '◆'; color: var(--blood-hi); margin-right: 10px; font-size: 9px; vertical-align: 2px; }
+
+  .compare__scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child > * { border-bottom: 0; }
+  thead th {
+    font: 400 1.4rem/1 var(--f-display);
+    letter-spacing: 0.08em;
+    background: var(--night-2);
+  }
+  thead th small { display: block; margin-top: 4px; font: 500 12px var(--f-body); color: var(--bone-mute); letter-spacing: 0.1em; }
+  tbody th { font-weight: 400; color: var(--bone-dim); font-size: 15px; }
+  td { width: 130px; text-align: center; color: var(--bone-mute); }
+  thead th:not(:first-child) { text-align: center; }
+  td.yes { color: var(--ember); font-weight: 600; }
+  td:last-child.yes { color: var(--blood-hi); }
+  tbody tr:hover { background: rgba(232, 223, 207, 0.03); }
+
+  @media (max-width: 860px) {
+    .notice { grid-template-columns: 1fr; }
+    .buy__tiers { grid-template-columns: 1fr; }
+  }
+</style>

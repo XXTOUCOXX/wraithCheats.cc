@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Scene from '../components/Scene.astro';
+import { SETUP_STEPS } from '../data/setup';
+import { SITE } from '../data/site';
+---
+<BaseLayout
+  title="Install guide"
+  description="Eight steps from license key to riding: buy, sign in, redeem, then load Wraith from Scooby Menu's Premium Menus."
+  preloadArt="hunt"
+>
+  <Scene art="hunt" focus="72% 50%" size="head" eager>
+    <p class="eyebrow" data-reveal>Install guide</p>
+    <h1 class="display h-xl" data-reveal style="--d:.1s">Saddle <em>up</em>.</h1>
+    <p class="lead" data-reveal style="--d:.2s">Eight steps from key to ride. Follow the trail and the wraith answers when called.</p>
+  </Scene>
+
+  <section class="wrap setup">
+    <div class="menus" data-reveal>
+      <div class="menu-card is-on">
+        <img src="/assets/scooby-logo.png" alt="" width="56" height="56" />
+        <div>
+          <p class="menu-card__name">Scooby Menu <span class="chip chip--fire"><span class="dot"></span>Supported</span></p>
+          <p>The base menu Wraith was built for. Auto-loaded by your executor.</p>
+        </div>
+      </div>
+      <div class="menu-card">
+        <span class="menu-card__plus" aria-hidden="true">+</span>
+        <div>
+          <p class="menu-card__name">More base menus <span class="chip">Roadmap</span></p>
+          <p>Additional base menus are on the way. Watch the <a href="/changelog" class="link-arrow">changelog</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <ol class="trail">
+      {SETUP_STEPS.map((s, i) => (
+        <li class="step" data-reveal>
+          <div class="step__text">
+            <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+            <h2 class="display h-md">{s.title}</h2>
+            <p>{s.body}</p>
+            {s.note && (
+              <p class="step__note"><b>{s.note.label}</b>{s.note.text}</p>
+            )}
+            {s.actions && (
+              <div class="step__actions">
+                {s.actions.map((a) => (
+                  <a href={a.href} class:list={['btn', a.ghost ? 'btn--ghost' : 'btn--primary']}>{a.label} →</a>
+                ))}
+              </div>
+            )}
+          </div>
+          <figure class="step__shot">
+            <img src={s.image} alt={`Step ${i + 1}: ${s.title}`} loading="lazy" width="2560" height="1440" />
+          </figure>
+        </li>
+      ))}
+    </ol>
+
+    <div class="stuck panel" data-reveal>
+      <p class="eyebrow">Stuck on the trail?</p>
+      <h2 class="display h-md">Holler in the <em>Discord</em>.</h2>
+      <p>Live support, install help, and the only place we post early builds.</p>
+      <a href={SITE.discord} target="_blank" rel="noopener" class="btn btn--primary">Join the Discord →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .setup { padding-block: 24px clamp(80px, 10vw, 140px); }
+
+  .menus { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: clamp(64px, 9vw, 120px); }
+  .menu-card {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding: 22px 24px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    color: var(--bone-mute);
+  }
+  .menu-card.is-on { border: 1px solid rgba(227, 154, 76, 0.35); background: rgba(227, 154, 76, 0.05); color: var(--bone-dim); }
+  .menu-card img { border-radius: 10px; flex: none; }
+  .menu-card p { margin: 0; font-size: 14.5px; }
+  .menu-card__name { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; color: var(--bone); font-weight: 600; font-size: 16px !important; margin-bottom: 6px !important; }
+  .menu-card__plus {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    font: 400 2rem/1 var(--f-display);
+  }
+
+  .trail { list-style: none; margin: 0; padding: 0; position: relative; }
+  .trail::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--line-strong) 6%, var(--line-strong) 94%, transparent);
+  }
+  .step {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+    padding-block: clamp(40px, 6vw, 72px);
+    position: relative;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 11px;
+    height: 11px;
+    margin: -5px 0 0 -5px;
+    background: var(--blood-hi);
+    transform: rotate(45deg);
+    box-shadow: 0 0 0 6px var(--night);
+  }
+  .step:nth-child(even) .step__text { order: 2; }
+  .step__num { font: 400 1.2rem/1 var(--f-display); letter-spacing: 0.14em; color: var(--ember); }
+  .step h2 { margin: 12px 0 14px; }
+  .step__text > p { color: var(--bone-dim); margin: 0 0 18px; max-width: 48ch; }
+  .step__note {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-left: 2px solid var(--ember);
+    background: rgba(227, 154, 76, 0.06);
+    font-size: 14px;
+    color: var(--bone-dim);
+    max-width: 48ch;
+  }
+  .step__note b {
+    flex: none;
+    font: 600 11px/1.9 var(--f-body);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+  .step__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+  .step__shot {
+    margin: 0;
+    padding: 10px;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  }
+  .step__shot img { width: 100%; height: auto; border-radius: 4px; }
+
+  .stuck {
+    margin-top: clamp(48px, 8vw, 96px);
+    padding: clamp(32px, 5vw, 56px);
+    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+  }
+  .stuck > * { margin: 0; }
+  .stuck p:not(.eyebrow) { color: var(--bone-dim); }
+  .stuck .btn { margin-top: 10px; }
+
+  @media (max-width: 860px) {
+    .menus { grid-template-columns: 1fr; }
+    .trail::before, .step::before { display: none; }
+    .step { grid-template-columns: 1fr; gap: 24px; border-bottom: 1px solid var(--line); }
+    .step:nth-child(even) .step__text { order: 0; }
+  }
+</style>

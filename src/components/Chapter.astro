@@ -1,0 +1,100 @@
+---
+import Scene from './Scene.astro';
+import type { Chapter } from '../data/chapters';
+
+interface Props {
+  chapter: Chapter;
+}
+const { chapter: c } = Astro.props;
+---
+<Scene art={c.art} focus={c.focus} video={c.video} id={c.id} class="chapter">
+  <div class="chapter__body">
+    <div class="chapter__num" data-reveal aria-hidden="true">{c.numeral}</div>
+    <p class="eyebrow" data-reveal style="--d:.05s">Chapter {c.numeral} · {c.kicker}</p>
+    <h2 class="display h-lg" data-reveal style="--d:.1s">{c.title}</h2>
+    <p class="serif chapter__pitch" data-reveal style="--d:.15s">{c.pitch}</p>
+    <ul class="chapter__list" data-reveal style="--d:.2s">
+      {c.bullets.map((b) => <li>{b}</li>)}
+    </ul>
+    {c.stats && (
+      <dl class="chapter__stats" data-reveal style="--d:.25s">
+        {c.stats.map((s) => (
+          <div>
+            <dt>{s.label}</dt>
+            <dd>{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+    <span class="chip chip--fire" data-reveal style="--d:.3s"><span class="dot"></span>{c.tier}</span>
+  </div>
+</Scene>
+
+<style>
+  .chapter__body {
+    position: relative;
+    max-width: 540px;
+  }
+  .chapter__num {
+    position: absolute;
+    left: -0.04em;
+    top: -0.5em;
+    z-index: -1;
+    font: 500 clamp(9rem, 20vw, 16rem)/1 var(--f-serif);
+    color: rgba(227, 154, 76, 0.07);
+    -webkit-text-stroke: 1px rgba(227, 154, 76, 0.3);
+    pointer-events: none;
+    user-select: none;
+  }
+  .eyebrow { margin: 0 0 18px; }
+  .chapter__pitch {
+    margin: 18px 0 26px;
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    color: var(--bone);
+  }
+  .chapter__list {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .chapter__list li {
+    position: relative;
+    padding-left: 24px;
+    color: var(--bone-dim);
+    font-size: 15px;
+  }
+  .chapter__list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 7px;
+    height: 7px;
+    background: var(--blood-hi);
+    transform: rotate(45deg);
+  }
+  .chapter__stats {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: start;
+    gap: 8px 32px;
+    margin: 0 0 28px;
+  }
+  .chapter__stats div { display: flex; flex-direction: column-reverse; }
+  .chapter__stats dt {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-mute);
+  }
+  .chapter__stats dd {
+    margin: 0;
+    font: 400 2.4rem/1 var(--f-display);
+    color: var(--bone);
+  }
+  @media (max-width: 560px) {
+    .chapter__stats { grid-template-columns: repeat(2, auto); }
+  }
+</style>

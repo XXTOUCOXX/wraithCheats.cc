@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Scene from '../components/Scene.astro';
+
+const MARKS = [
+  { file: 'wraith-logo.svg', label: 'Horizontal lockup', note: 'Primary logo · dark backgrounds', wide: true },
+  { file: 'wraith-logo-light.svg', label: 'Horizontal lockup', note: 'Light backgrounds', wide: true, light: true },
+  { file: 'wraith-logo-stacked.svg', label: 'Stacked lockup', note: 'Square spaces, socials' },
+  { file: 'wraith-emblem.png', label: 'Emblem', note: 'Transparent · 1024 px PNG' },
+  { file: 'wraith-icon.png', label: 'App icon', note: 'Avatars, Discord, tiles · PNG' },
+  { file: 'wraith-wordmark.svg', label: 'Wordmark', note: 'Type only' },
+];
+
+const PALETTE = [
+  { name: 'Ink', hex: '#06070B' },
+  { name: 'Night', hex: '#0B0D13' },
+  { name: 'Bone', hex: '#ECE3D3' },
+  { name: 'Ember', hex: '#E39A4C' },
+  { name: 'Blood', hex: '#B3262B' },
+];
+---
+<BaseLayout title="Brand" description="Wraith logo files and brand palette." preloadArt="gun">
+  <Scene art="gun" focus="82% 60%" size="head" eager>
+    <p class="eyebrow" data-reveal>Brand identity</p>
+    <h1 class="display h-xl" data-reveal style="--d:.1s">The <em>mark</em>.</h1>
+    <p class="lead" data-reveal style="--d:.2s">The Ghost Gunslinger: a skull outlaw under a wide brim, wreathed in ember smoke. Free to use when you talk about Wraith.</p>
+  </Scene>
+
+  <section class="wrap brand">
+    <div class="marks">
+      {MARKS.map((m) => (
+        <figure class:list={['mark', { 'mark--wide': m.wide, 'mark--light': m.light }]} data-reveal>
+          <div class="mark__art"><img src={`/assets/${m.file}`} alt={`Wraith ${m.label}`} loading="lazy" /></div>
+          <figcaption>
+            <span><strong>{m.label}</strong>{m.note}{m.file.endsWith('.svg') ? ' · SVG' : ''}</span>
+            <span class="mark__links">
+              <a href={`/assets/${m.file}`} download class="link-arrow">Download</a>
+              <a href={`/assets/${m.file}`} target="_blank" rel="noopener" class="link-arrow">Open</a>
+            </span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <div class="rules" data-reveal>
+      <div>
+        <h2 class="display h-sm">Do</h2>
+        <ul>
+          <li>Use the lockup on night or bone backgrounds only</li>
+          <li>Leave clear space of at least the hat brim's height around it</li>
+          <li>Use the app icon for avatars, the emblem on art and merch</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="display h-sm">Don't</h2>
+        <ul class="is-dont">
+          <li>Recolor, stretch or crop the emblem</li>
+          <li>Set the wordmark in another typeface</li>
+          <li>Place it over busy art without a dark scrim</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="display h-sm">PNG</h2>
+        <ul class="is-files">
+          <li><a href="/icon-512.png" download class="link-arrow">App icon · 512 px</a></li>
+          <li><a href="/apple-touch-icon.png" download class="link-arrow">Touch icon · 180 px</a></li>
+          <li><a href="/og.jpg" download class="link-arrow">Social card · 1200 × 630</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <header class="section-head palette-head">
+      <p class="eyebrow" data-reveal>Palette</p>
+      <h2 class="display h-md" data-reveal>Night, bone, <em>blood</em>.</h2>
+    </header>
+    <ul class="palette" data-reveal>
+      {PALETTE.map((c) => (
+        <li>
+          <span class="swatch" style={`background:${c.hex}`}></span>
+          <strong>{c.name}</strong>
+          <code>{c.hex}</code>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .brand { padding-block: 40px clamp(80px, 10vw, 140px); }
+  .marks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: clamp(72px, 10vw, 120px); }
+  .mark { margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--night-2); }
+  .mark--wide { grid-column: 1 / -1; }
+  .mark--light .mark__art { background: radial-gradient(ellipse at center, #f6efe2 0%, #ddd3c1 80%); }
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: clamp(72px, 10vw, 120px);
+  }
+  .rules > div { padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--night-2); }
+  .rules h2 { margin: 0 0 14px; }
+  .rules ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; color: var(--bone-dim); }
+  .rules li { padding-left: 22px; position: relative; }
+  .rules li::before { content: '✓'; position: absolute; left: 0; color: var(--ember); }
+  .rules .is-dont li::before { content: '✕'; color: var(--blood-hi); }
+  .rules .is-files li::before { content: '↓'; }
+  .mark__art {
+    display: grid;
+    place-items: center;
+    padding: clamp(24px, 5vw, 56px);
+    background: radial-gradient(ellipse at center, #141a26 0%, var(--ink) 75%);
+    min-height: 260px;
+  }
+  .mark__art img { max-height: 220px; width: auto; max-width: 100%; }
+  .mark--wide .mark__art img { max-height: 160px; }
+  .mark figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--bone-mute);
+  }
+  .mark figcaption strong { color: var(--bone); margin-right: 12px; font-weight: 600; }
+  .mark__links { display: flex; gap: 18px; }
+  .palette { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  .palette li { display: grid; gap: 6px; font-size: 14px; }
+  .swatch { display: block; aspect-ratio: 4 / 3; border-radius: 6px; border: 1px solid var(--line-strong); margin-bottom: 6px; }
+  .palette code { color: var(--bone-mute); font-size: 13px; }
+  @media (max-width: 760px) {
+    .marks { grid-template-columns: 1fr; }
+    .rules { grid-template-columns: 1fr; }
+    .palette { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

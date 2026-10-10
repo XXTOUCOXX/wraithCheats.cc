@@ -1,0 +1,29 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+import '../styles/auth.css';
+import { SITE } from '../data/site';
+---
+<AuthLayout title="Register" description="Wraith accounts are Scooby accounts. Register on the Scooby portal." quote="New rider? Welcome to the frontier.">
+  <script is:inline define:vars={{ target: SITE.scoobyRegister }}>
+    try {
+      location.replace(localStorage.getItem('portalSessionToken') ? '/dashboard' : target);
+    } catch {
+      location.replace(target);
+    }
+  </script>
+  <noscript><meta http-equiv="refresh" content={`0; url=${SITE.scoobyRegister}`} /></noscript>
+
+  <header class="auth-head">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="eyebrow">New rider</p>
+    <h1 class="display">Taking you to <em>Scooby</em>.</h1>
+    <p>Wraith accounts are Scooby accounts. Registration happens on the Scooby portal.</p>
+  </header>
+
+  <p class="auth-note">
+    Already own a <strong>Scooby</strong> account? You don't need to register again. <a href="/login">Sign in to Wraith with it →</a>
+  </p>
+
+  <a href={SITE.scoobyRegister} class="btn btn--primary btn--full">Continue to Scooby registration →</a>
+  <p class="auth-alt">Already have an account? <a href="/login">Sign in →</a></p>
+</AuthLayout>
